@@ -1,0 +1,49 @@
+body {
+  font-family: Arial, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
+}
+.container {
+  text-align: center;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+.btn {
+  display: block;
+  width: 200px;
+  margin: 10px auto;
+  padding: 10px;
+  font-size: 18px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.btn:hover {
+  opacity: 0.8;
+}
+.btn-tinh-tien {
+  background: #ff9800;
+  color: white;
+}
+.btn-quan-ly-gia {
+  background: #2196f3;
+  color: white;
+}
+.btn-san-pham {
+  background: #4caf50;
+  color: white;
+}
+.btn-doanh-thu {
+  background: #9c27b0;
+  color: white;
+}
+.btn-khuyen-mai {
+  background: #e91e63;
+  color: white;
+}

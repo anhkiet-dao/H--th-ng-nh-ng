@@ -2,6 +2,8 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/11.5.0/firebas
 import {
   getDatabase,
   ref,
+  get,
+  child,
   push,
   set,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
@@ -31,11 +33,68 @@ function layGioVietNam() {
   return now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-// Hàm tính toán
+document.getElementById("maSP").addEventListener("input", async function () {
+  const maSP = this.value.trim();
+  if (!maSP) return;
+
+  try {
+    const dbRef = ref(database);
+    const productsSnapshot = await get(child(dbRef, "products"));
+
+    if (!productsSnapshot.exists()) {
+      console.warn("Không có dữ liệu sản phẩm.");
+      return;
+    }
+
+    let productId = null;
+    productsSnapshot.forEach((childSnapshot) => {
+      const product = childSnapshot.val();
+      if (product.id === maSP) {
+        productId = childSnapshot.key;
+      }
+    });
+
+    if (!productId) {
+      console.warn("Không tìm thấy sản phẩm với mã:", maSP);
+      return;
+    }
+
+    // Lấy thông tin sản phẩm
+    const productSnapshot = await get(child(dbRef, `products/${productId}`));
+    if (productSnapshot.exists()) {
+      const product = productSnapshot.val();
+      document.getElementById("tenSP").value = product.name || "";
+      document.getElementById("giaSP").value = product.price || 0;
+    } else {
+      document.getElementById("tenSP").value = "";
+      document.getElementById("giaSP").value = "";
+    }
+
+    // Lấy thông tin giảm giá
+    const discountSnapshot = await get(child(dbRef, `discounts/${productId}`));
+    if (discountSnapshot.exists()) {
+      const discount = discountSnapshot.val();
+      document.getElementById("giamGia").value = discount.discount || 0;
+    } else {
+      document.getElementById("giamGia").value = 0;
+    }
+
+    // Nếu đã có số lượng thì tự động tính tiền
+    if (document.getElementById("soLuong").value) {
+      tinhTien();
+    }
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu:", error);
+  }
+});
+
+// Hàm tính toán tiền
 function tinhTien() {
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
   const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
   const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
+
+  if (!giaSP || !soLuong) return; // Nếu thiếu giá hoặc số lượng thì không làm gì
 
   const tongGia = giaSP * soLuong;
   const tienGiam = tongGia * (giamGia / 100);
@@ -49,10 +108,25 @@ function tinhTien() {
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
 
+function resetForm() {
+  document.getElementById("maSP").value = "";
+  document.getElementById("tenSP").value = "";
+  document.getElementById("giaSP").value = "";
+  document.getElementById("soLuong").value = "";
+  document.getElementById("giamGia").value = "";
+  document.getElementById("tongGia").textContent = "0 VND";
+  document.getElementById("thanhToan").textContent = "0 VND";
+}
+
+// Thêm sự kiện khi nhập số lượng hoặc giảm giá
+document.querySelectorAll(".calculate-input").forEach((input) => {
+  input.addEventListener("input", tinhTien);
+});
+
 // Thêm sản phẩm vào bảng
 function themSanPhamVaoBang() {
-  const maSP = document.getElementById("maSP").value;
-  const tenSP = document.getElementById("tenSP").value;
+  const maSP = document.getElementById("maSP").value.trim();
+  const tenSP = document.getElementById("tenSP").value.trim();
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
   const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
   const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
@@ -155,9 +229,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Sự kiện thêm sản phẩm khi nhấn Enter ở ô giảm giá
   document
-    .getElementById("giamGia")
+    .getElementById("soLuong")
     .addEventListener("blur", themSanPhamVaoBang);
-
+  resetForm();
   // Sự kiện thanh toán
   document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
 });

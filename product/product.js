@@ -5,7 +5,6 @@ import {
   set,
   remove,
   get,
-  child,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -24,18 +23,6 @@ const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
 document.addEventListener("DOMContentLoaded", function () {
-  function handleFocus(cell) {
-    if (cell.textContent.trim() === cell.dataset.placeholder) {
-      cell.textContent = ""; // Xóa placeholder khi focus
-    }
-  }
-
-  function handleBlur(cell) {
-    if (cell.textContent.trim() === "") {
-      cell.textContent = cell.dataset.placeholder; // Trả lại placeholder nếu bỏ trống
-    }
-  }
-
   function loadProducts() {
     const dbRef = ref(database, "products");
     get(dbRef).then((snapshot) => {
@@ -44,40 +31,30 @@ document.addEventListener("DOMContentLoaded", function () {
         table.innerHTML = "";
         snapshot.forEach((childSnapshot) => {
           let product = childSnapshot.val();
-          addProductRow(product);
+          addProductRow(product, false); // Dữ liệu từ Firebase thì không chỉnh sửa được
         });
       }
     });
   }
 
-  function addProductRow(product) {
+  function addProductRow(product, isNew) {
     let table = document.getElementById("productTable");
     let newRow = document.createElement("tr");
 
     newRow.innerHTML = `
-      <td contenteditable="true" data-placeholder="SPXXX">${product.id}</td>
-      <td contenteditable="true" data-placeholder="Tên sản phẩm">${product.name}</td>
-      <td contenteditable="true" data-placeholder="Giá">${product.price}</td>
-      <td contenteditable="true" data-placeholder="Ngày tháng">${product.date}</td>
-      <td contenteditable="true" data-placeholder="Số lượng">${product.quantity}</td>
+      <td contenteditable="${isNew}">${product.id}</td>
+      <td contenteditable="${isNew}">${product.name}</td>
+      <td contenteditable="${isNew}">${product.price}</td>
+      <td contenteditable="${isNew}">${product.date}</td>
+      <td contenteditable="${isNew}">${product.quantity}</td>
       <td>
-          <button class="edit-btn">Sửa</button>
-          <button class="save-btn">Lưu</button>
+          <button class="edit-btn" ${isNew ? "disabled" : ""}>Sửa</button>
+          <button class="save-btn">${isNew ? "Lưu" : "Lưu"}</button>
           <button class="delete-btn">Xóa</button>
       </td>
     `;
 
     table.appendChild(newRow);
-
-    newRow.querySelectorAll("td[contenteditable]").forEach((cell) => {
-      cell.addEventListener("focus", function () {
-        handleFocus(cell);
-      });
-
-      cell.addEventListener("blur", function () {
-        handleBlur(cell);
-      });
-    });
 
     newRow.querySelector(".edit-btn").addEventListener("click", function () {
       editRow(this);
@@ -97,27 +74,53 @@ document.addEventListener("DOMContentLoaded", function () {
     row.querySelectorAll("td[contenteditable]").forEach((cell) => {
       cell.contentEditable = "true";
     });
+
     row.querySelector(".save-btn").disabled = false;
     button.disabled = true;
   }
 
   function saveRow(button) {
     let row = button.closest("tr");
-    row.querySelectorAll("td[contenteditable]").forEach((cell) => {
-      cell.contentEditable = "false";
-    });
-    row.querySelector(".edit-btn").disabled = false;
-    button.disabled = true;
 
     let productData = {
-      id: row.cells[0].textContent,
-      name: row.cells[1].textContent,
-      price: row.cells[2].textContent,
-      date: row.cells[3].textContent,
-      quantity: row.cells[4].textContent,
+      id: row.cells[0].textContent.trim(),
+      name: row.cells[1].textContent.trim(),
+      price: row.cells[2].textContent.trim(),
+      date: row.cells[3].textContent.trim(),
+      quantity: row.cells[4].textContent.trim(),
     };
 
-    set(ref(database, `products/${productData.id}`), productData);
+    // Lưu vào bảng products
+    set(ref(database, `products/${productData.id}`), productData)
+      .then(() => {
+        console.log("Sản phẩm đã được lưu vào products!");
+
+        // Tạo dữ liệu khuyến mãi mặc định
+        let discountData = {
+          id: productData.id,
+          name: productData.name, // Đảm bảo có tên sản phẩm
+          discount: "", // Giảm giá mặc định
+          start: "", // Chưa có ngày bắt đầu
+          end: "", // Chưa có ngày kết thúc
+        };
+
+        // Lưu vào bảng discounts
+        return set(ref(database, `discounts/${productData.id}`), discountData);
+      })
+      .then(() => {
+        console.log("Sản phẩm đã được đồng bộ vào discounts!");
+
+        // Khóa chỉnh sửa sau khi lưu
+        row.querySelectorAll("td[contenteditable]").forEach((cell) => {
+          cell.contentEditable = "false";
+        });
+
+        row.querySelector(".edit-btn").disabled = false;
+        button.disabled = true;
+      })
+      .catch((error) => {
+        console.error("Lỗi khi lưu:", error);
+      });
   }
 
   function deleteRow(button) {
@@ -139,27 +142,35 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function addRow() {
+    let table = document.getElementById("productTable");
+    let newRow = document.createElement("tr");
+
     let productId = "SP" + Math.floor(Math.random() * 1000);
-    let product = {
-      id: productId,
-      name: "Tên sản phẩm",
-      price: "Giá",
-      date: "Ngày tháng",
-      quantity: "Số lượng",
-    };
-    addProductRow(product);
+
+    newRow.innerHTML = `
+      <td contenteditable="true">${productId}</td>
+      <td contenteditable="true">Tên sản phẩm</td>
+      <td contenteditable="true">Giá</td>
+      <td contenteditable="true">Ngày tháng</td>
+      <td contenteditable="true">Số lượng</td>
+      <td>
+          <button class="edit-btn" disabled>Sửa</button>
+          <button class="save-btn">Lưu</button>
+          <button class="delete-btn">Xóa</button>
+      </td>
+    `;
+
+    table.appendChild(newRow);
+
+    newRow.querySelector(".save-btn").addEventListener("click", function () {
+      saveRow(this);
+    });
+
+    newRow.querySelector(".delete-btn").addEventListener("click", function () {
+      newRow.remove(); // Nếu chưa lưu thì chỉ cần xóa khỏi giao diện
+    });
   }
 
   document.getElementById("addRowBtn").addEventListener("click", addRow);
   loadProducts();
-
-  document.querySelectorAll("td[contenteditable]").forEach((cell) => {
-    cell.addEventListener("focus", function () {
-      handleFocus(cell);
-    });
-
-    cell.addEventListener("blur", function () {
-      handleBlur(cell);
-    });
-  });
 });

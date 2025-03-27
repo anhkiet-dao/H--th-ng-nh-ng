@@ -4,6 +4,7 @@ import {
   ref,
   set,
   onValue,
+  get,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
 // Cấu hình Firebase
@@ -27,7 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function loadDiscounts() {
     const dbRef = ref(database, "discounts");
-    onValue(dbRef, (snapshot) => {
+    get(dbRef).then((snapshot) => {
       table.innerHTML = ""; // Xóa bảng cũ để cập nhật mới
       if (snapshot.exists()) {
         snapshot.forEach((childSnapshot) => {
@@ -40,18 +41,24 @@ document.addEventListener("DOMContentLoaded", function () {
 
   function syncProductsToDiscounts() {
     const productsRef = ref(database, "products");
-    onValue(productsRef, (snapshot) => {
+    get(productsRef).then((snapshot) => {
       if (snapshot.exists()) {
         snapshot.forEach((childSnapshot) => {
           let product = childSnapshot.val();
-          let discountData = {
-            id: product.id,
-            name: product.name,
-            price: "", // Giá khuyến mãi, mặc định rỗng
-            datestart: "",
-            dateend: "",
-          };
-          set(ref(database, `discounts/${product.id}`), discountData);
+          let discountRef = ref(database, `discounts/${product.id}`);
+
+          get(discountRef).then((discountSnapshot) => {
+            if (!discountSnapshot.exists()) {
+              let discountData = {
+                id: product.id,
+                name: product.name,
+                discount: "", // Giá khuyến mãi, mặc định rỗng
+                datestart: "",
+                dateend: "",
+              };
+              set(discountRef, discountData);
+            }
+          });
         });
       }
     });
@@ -63,39 +70,44 @@ document.addEventListener("DOMContentLoaded", function () {
     newRow.innerHTML = `
       <td>${product.id}</td>
       <td>${product.name}</td>
-      <td contenteditable="true">${product.price || ""}</td>
-      <td contenteditable="true">${product.datestart || ""}</td>
-      <td contenteditable="true">${product.dateend || ""}</td>
+      <td contenteditable="false">${product.discount || ""}</td>
+      <td contenteditable="false">${product.datestart || ""}</td>
+      <td contenteditable="false">${product.dateend || ""}</td>
       <td>
         <button class="edit-btn">Sửa</button>
-        <button class="save-btn">Lưu</button>
+        <button class="save-btn" disabled>Lưu</button>
       </td>
     `;
 
     table.appendChild(newRow);
 
-    newRow.querySelector(".edit-btn").addEventListener("click", function () {
-      editRow(this);
+    let editButton = newRow.querySelector(".edit-btn");
+    let saveButton = newRow.querySelector(".save-btn");
+    let editableCells = newRow.querySelectorAll("td[contenteditable]");
+
+    editButton.addEventListener("click", function () {
+      editableCells.forEach((cell) =>
+        cell.setAttribute("contenteditable", "true")
+      );
+      editButton.disabled = true;
+      saveButton.disabled = false;
     });
 
-    newRow.querySelector(".save-btn").addEventListener("click", function () {
-      saveRow(this);
+    saveButton.addEventListener("click", function () {
+      saveRow(newRow);
+      editableCells.forEach((cell) =>
+        cell.setAttribute("contenteditable", "false")
+      );
+      editButton.disabled = false;
+      saveButton.disabled = true;
     });
   }
 
-  function editRow(button) {
-    let row = button.closest("tr");
-    row.querySelectorAll("td[contenteditable]").forEach((cell) => {
-      cell.contentEditable = "true";
-    });
-  }
-
-  function saveRow(button) {
-    let row = button.closest("tr");
+  function saveRow(row) {
     let productData = {
       id: row.cells[0].textContent,
       name: row.cells[1].textContent,
-      price: row.cells[2].textContent,
+      discount: row.cells[2].textContent,
       datestart: row.cells[3].textContent,
       dateend: row.cells[4].textContent,
     };

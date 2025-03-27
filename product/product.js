@@ -123,8 +123,19 @@ document.addEventListener("DOMContentLoaded", function () {
   function deleteRow(button) {
     let row = button.closest("tr");
     let productId = row.cells[0].textContent;
-    remove(ref(database, `products/${productId}`));
-    row.remove();
+
+    // Xóa sản phẩm khỏi products
+    remove(ref(database, `products/${productId}`))
+      .then(() => {
+        // Xóa sản phẩm khỏi discounts để đồng bộ
+        return remove(ref(database, `discounts/${productId}`));
+      })
+      .then(() => {
+        row.remove();
+      })
+      .catch((error) => {
+        console.error("Lỗi khi xóa sản phẩm:", error);
+      });
   }
 
   function addRow() {

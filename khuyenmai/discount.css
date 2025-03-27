@@ -104,19 +104,3 @@ button {
   background-color: #a0ba09;
   transform: scale(1.05);
 }
-
-#addRowBtn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  font-size: 16px;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background 0.3s, transform 0.2s;
-}
-
-#addRowBtn:hover {
-  background-color: #0056b3;
-  transform: scale(1.05);
-}

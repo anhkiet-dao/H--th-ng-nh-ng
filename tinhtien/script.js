@@ -108,6 +108,11 @@ function tinhTien() {
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
 
+// Thêm sự kiện khi nhập số lượng hoặc giảm giá
+document.querySelectorAll(".calculate-input").forEach((input) => {
+  input.addEventListener("input", tinhTien);
+});
+
 function resetForm() {
   document.getElementById("maSP").value = "";
   document.getElementById("tenSP").value = "";
@@ -117,11 +122,6 @@ function resetForm() {
   document.getElementById("tongGia").textContent = "0 VND";
   document.getElementById("thanhToan").textContent = "0 VND";
 }
-
-// Thêm sự kiện khi nhập số lượng hoặc giảm giá
-document.querySelectorAll(".calculate-input").forEach((input) => {
-  input.addEventListener("input", tinhTien);
-});
 
 // Thêm sản phẩm vào bảng
 function themSanPhamVaoBang() {
@@ -228,10 +228,10 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Sự kiện thêm sản phẩm khi nhấn Enter ở ô giảm giá
-  document
-    .getElementById("soLuong")
-    .addEventListener("blur", themSanPhamVaoBang);
-  resetForm();
+  document.getElementById("soLuong").addEventListener("blur", function () {
+    themSanPhamVaoBang();
+    resetForm();
+  });
   // Sự kiện thanh toán
   document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
 });

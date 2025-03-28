@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function loadDiscounts() {
     const dbRef = ref(database, "discounts");
     get(dbRef).then((snapshot) => {
-      table.innerHTML = ""; // Xóa bảng cũ để cập nhật mới
+      table.innerHTML = "";
       if (snapshot.exists()) {
         snapshot.forEach((childSnapshot) => {
           let product = childSnapshot.val();
@@ -52,7 +52,7 @@ document.addEventListener("DOMContentLoaded", function () {
               let discountData = {
                 id: product.id,
                 name: product.name,
-                discount: "", // Giá khuyến mãi, mặc định rỗng
+                discount: "",
                 datestart: "",
                 dateend: "",
               };

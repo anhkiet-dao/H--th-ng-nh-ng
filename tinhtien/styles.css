@@ -91,14 +91,14 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  border: 1px solid black; /* Viền ngoài bảng */
+  border: 1px solid black; 
 }
 
 th,
 td {
   padding: 10px;
   text-align: center;
-  border: 1px solid black; /* Viền từng ô */
+  border: 1px solid black; 
 }
 
 th {
@@ -116,8 +116,8 @@ button,
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin: 10px auto; /* Căn giữa */
-  display: block; /* Giúp margin auto hoạt động */
+  margin: 10px auto; 
+  display: block; 
   text-align: center;
 }
 

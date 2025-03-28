@@ -31,7 +31,7 @@ document.addEventListener("DOMContentLoaded", function () {
         table.innerHTML = "";
         snapshot.forEach((childSnapshot) => {
           let product = childSnapshot.val();
-          addProductRow(product, false); // Dữ liệu từ Firebase thì không chỉnh sửa được
+          addProductRow(product, false);
         });
       }
     });
@@ -98,10 +98,10 @@ document.addEventListener("DOMContentLoaded", function () {
         // Tạo dữ liệu khuyến mãi mặc định
         let discountData = {
           id: productData.id,
-          name: productData.name, // Đảm bảo có tên sản phẩm
-          discount: "", // Giảm giá mặc định
-          start: "", // Chưa có ngày bắt đầu
-          end: "", // Chưa có ngày kết thúc
+          name: productData.name,
+          discount: "",
+          start: "",
+          end: "",
         };
 
         // Lưu vào bảng discounts
@@ -130,7 +130,6 @@ document.addEventListener("DOMContentLoaded", function () {
     // Xóa sản phẩm khỏi products
     remove(ref(database, `products/${productId}`))
       .then(() => {
-        // Xóa sản phẩm khỏi discounts để đồng bộ
         return remove(ref(database, `discounts/${productId}`));
       })
       .then(() => {
@@ -167,7 +166,7 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
     newRow.querySelector(".delete-btn").addEventListener("click", function () {
-      newRow.remove(); // Nếu chưa lưu thì chỉ cần xóa khỏi giao diện
+      newRow.remove();
     });
   }
 

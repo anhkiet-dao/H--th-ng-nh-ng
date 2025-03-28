@@ -30,7 +30,23 @@
       <h3>
         Tổng tiền: <span id="tongThanhToan"><strong>0 VND</strong></span>
       </h3>
-
+      <div id="detailModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc;">
+        <h3>Chi tiết đơn hàng</h3>
+        <table border="1">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Mã Sản Phẩm</th>
+              <th>Tên Sản Phẩm</th>
+              <th>Giá Sản Phẩm</th>
+              <th>Số Lượng</th>
+              <th>Giảm Giá (%)</th>
+            </tr>
+          </thead>
+          <tbody id="modalBody"></tbody>
+        </table>        
+        <button id="backButton">Back</button>
+      </div>
     <script type="module" src="revenue.js"></script>
   </body>
 </html>

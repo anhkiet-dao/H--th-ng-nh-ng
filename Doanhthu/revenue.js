@@ -39,8 +39,7 @@ async function loadRevenueData() {
     }
 
     const tableBody = document.querySelector("#sanPhamTable tbody");
-    tableBody.innerHTML = ""; // Xóa dữ liệu cũ trước khi hiển thị mới
-
+    tableBody.innerHTML = "";
     let totalRevenue = 0;
 
     revenueSnapshot.forEach((childSnapshot) => {
@@ -51,9 +50,8 @@ async function loadRevenueData() {
       row.insertCell(1).textContent = `${order.tongTien.toLocaleString()} VND`;
 
       const detailButton = document.createElement("button");
-      detailButton.textContent = "Xem chi tiết";
+      detailButton.textContent = "Chi tiết";
       detailButton.onclick = () => viewDetails(order.danhSachSanPham);
-
       row.insertCell(2).appendChild(detailButton);
 
       totalRevenue += order.tongTien;
@@ -67,16 +65,27 @@ async function loadRevenueData() {
   }
 }
 
-// Hàm hiển thị chi tiết đơn hàng
+// Hiển thị chi tiết đơn hàng trong bảng modal
 function viewDetails(orderItems) {
-  let details = "Chi tiết đơn hàng:\n";
+  const modalBody = document.getElementById("modalBody");
+  modalBody.innerHTML = "";
   orderItems.forEach((item, index) => {
-    details += `${index + 1}. ${item.tenSP} - SL: ${
-      item.soLuong
-    } - Giá: ${item.giaSP.toLocaleString()} VND\n`;
+    const row = `<tr>
+        <td>${index + 1}</td>
+        <td>${item.maSP}</td>
+        <td>${item.tenSP}</td>
+        <td>${item.giaSP.toLocaleString()} VND</td>
+        <td>${item.soLuong}</td>
+        <td>${item.giamGia}%</td>
+      </tr>`;
+    modalBody.innerHTML += row;
   });
-  alert(details);
+  document.getElementById("detailModal").style.display = "block";
 }
 
-// Gọi hàm khi trang load
+// Đóng modal
+document.getElementById("backButton").addEventListener("click", function () {
+  document.getElementById("detailModal").style.display = "none";
+});
+
 document.addEventListener("DOMContentLoaded", loadRevenueData);

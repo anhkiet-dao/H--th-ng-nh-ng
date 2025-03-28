@@ -79,7 +79,6 @@ document.getElementById("maSP").addEventListener("input", async function () {
       document.getElementById("giamGia").value = 0;
     }
 
-    // Nếu đã có số lượng thì tự động tính tiền
     if (document.getElementById("soLuong").value) {
       tinhTien();
     }
@@ -88,7 +87,6 @@ document.getElementById("maSP").addEventListener("input", async function () {
   }
 });
 
-// Hàm tính toán tiền
 function tinhTien() {
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
   const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
@@ -108,7 +106,6 @@ function tinhTien() {
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
 
-// Thêm sự kiện khi nhập số lượng hoặc giảm giá
 document.querySelectorAll(".calculate-input").forEach((input) => {
   input.addEventListener("input", tinhTien);
 });
@@ -123,7 +120,6 @@ function resetForm() {
   document.getElementById("thanhToan").textContent = "0 VND";
 }
 
-// Thêm sản phẩm vào bảng
 function themSanPhamVaoBang() {
   const maSP = document.getElementById("maSP").value.trim();
   const tenSP = document.getElementById("tenSP").value.trim();
@@ -142,11 +138,11 @@ function themSanPhamVaoBang() {
 
   newRow.insertCell(0).textContent = maSP;
   newRow.insertCell(1).textContent = tenSP;
-  newRow.insertCell(2).textContent = `${giaSP.toLocaleString()} VND`;
+  newRow.insertCell(2).textContent = `${giaSP.toLocaleString()}`;
   newRow.insertCell(3).textContent = soLuong;
-  newRow.insertCell(4).textContent = `${tongGia.toLocaleString()} VND`;
-  newRow.insertCell(5).textContent = `${giamGia}%`;
-  newRow.insertCell(6).textContent = `${thanhToan.toLocaleString()} VND`;
+  newRow.insertCell(4).textContent = `${tongGia.toLocaleString()}`;
+  newRow.insertCell(5).textContent = `${giamGia}`;
+  newRow.insertCell(6).textContent = `${thanhToan.toLocaleString()}`;
 
   updateTotal();
 }
@@ -163,7 +159,6 @@ function updateTotal() {
   ).innerHTML = `<strong>${total.toLocaleString()} VND</strong>`;
 }
 
-// Thanh toán
 function thanhToan() {
   const rows = document.querySelectorAll("#sanPhamTable tbody tr");
   if (rows.length === 0) {
@@ -207,7 +202,6 @@ function thanhToan() {
       document.getElementById("tongThanhToan").innerHTML =
         "<strong>0 VND</strong>";
 
-      // Reset form
       document.getElementById("maSP").value = "";
       document.getElementById("tenSP").value = "";
       document.getElementById("giaSP").value = "";

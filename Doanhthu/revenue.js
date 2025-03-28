@@ -74,7 +74,7 @@ function viewDetails(orderItems) {
         <td>${index + 1}</td>
         <td>${item.maSP}</td>
         <td>${item.tenSP}</td>
-        <td>${item.giaSP.toLocaleString()} VND</td>
+        <td>${item.giaSP.toLocaleString()}</td>
         <td>${item.soLuong}</td>
         <td>${item.giamGia}%</td>
       </tr>`;

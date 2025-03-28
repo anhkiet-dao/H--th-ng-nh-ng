@@ -63,3 +63,22 @@ label {
   display: block;
   color: #555;
 }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 10px;
+  border: 2px solid black; /* Viền ngoài bảng */
+}
+
+th,
+td {
+  padding: 10px;
+  text-align: center;
+  border: 2px solid black; /* Viền từng ô */
+}
+
+th {
+  background-color: #007bff;
+  color: white;
+}

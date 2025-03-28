@@ -149,10 +149,10 @@ document.addEventListener("DOMContentLoaded", function () {
 
     newRow.innerHTML = `
       <td contenteditable="true">${productId}</td>
-      <td contenteditable="true">Tên sản phẩm</td>
-      <td contenteditable="true">Giá</td>
-      <td contenteditable="true">Ngày tháng</td>
-      <td contenteditable="true">Số lượng</td>
+      <td contenteditable="true"></td>
+      <td contenteditable="true"></td>
+      <td contenteditable="true"></td>
+      <td contenteditable="true"></td>
       <td>
           <button class="edit-btn" disabled>Sửa</button>
           <button class="save-btn">Lưu</button>

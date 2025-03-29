@@ -91,17 +91,21 @@ button,
   background-color: #007bff;
   color: white;
   padding: 5px;
-  width: 70%;
+  width: 50%;
   border: none;
   border-radius: 5px;
   cursor: pointer;
   font-size: 14px;
-  margin: 5px auto; /* Căn giữa */
-  display: block; /* Giúp margin auto hoạt động */
+  margin: 5px auto;
+  display: block;
   text-align: center;
 }
 
 button:hover,
 .button-primary:hover {
   background-color: #0056b3;
+}
+
+#backButton {
+  width: 10%;
 }

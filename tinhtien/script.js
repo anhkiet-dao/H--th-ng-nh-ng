@@ -7,6 +7,7 @@ import {
   push,
   set,
   remove,
+  onChildAdded,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
 // Cấu hình Firebase
@@ -31,23 +32,17 @@ function layGioVietNam() {
   return new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-async function layTatCaDonHang() {
-  try {
-    const orderSnapshot = await get(child(ref(database), "order"));
-    if (!orderSnapshot.exists()) return;
+// Hàm lắng nghe đơn hàng mới được thêm vào "order"
+function theoDoiDonHangMoi() {
+  const orderRef = ref(database, "order");
 
-    const tableBody = document.querySelector("#sanPhamTable tbody");
-    tableBody.innerHTML = "";
-
-    orderSnapshot.forEach((childSnapshot) => {
-      const { masp, soluong } = childSnapshot.val();
-      layThongTinSanPham(masp, soluong);
-    });
-  } catch (error) {
-    console.error("Lỗi khi lấy dữ liệu đơn hàng:", error);
-  }
+  onChildAdded(orderRef, (snapshot) => {
+    const { masp, soluong } = snapshot.val();
+    layThongTinSanPham(masp, soluong);
+  });
 }
 
+// Hàm lấy thông tin sản phẩm theo mã sản phẩm
 async function layThongTinSanPham(maSP, soLuong) {
   if (!maSP) return;
   try {
@@ -179,6 +174,6 @@ async function thanhToan() {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-  layTatCaDonHang();
+  theoDoiDonHangMoi();
   document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
 });

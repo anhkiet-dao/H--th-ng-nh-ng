@@ -50,7 +50,9 @@ async function loadRevenueData() {
       row.insertCell(1).textContent = `${order.tongTien.toLocaleString()} VND`;
 
       const detailButton = document.createElement("button");
-      detailButton.textContent = "Chi tiết";
+      detailButton.innerHTML = '<i class="fas fa-info-circle"></i>';
+      detailButton.classList.add("detail-btn");
+
       detailButton.onclick = () => viewDetails(order.danhSachSanPham);
       row.insertCell(2).appendChild(detailButton);
 

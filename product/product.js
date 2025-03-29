@@ -48,9 +48,15 @@ document.addEventListener("DOMContentLoaded", function () {
       <td contenteditable="${isNew}">${product.date}</td>
       <td contenteditable="${isNew}">${product.quantity}</td>
       <td>
-          <button class="edit-btn" ${isNew ? "disabled" : ""}>Sửa</button>
-          <button class="save-btn">${isNew ? "Lưu" : "Lưu"}</button>
-          <button class="delete-btn">Xóa</button>
+          <button class="edit-btn" ${
+            isNew ? "disabled" : ""
+          }><i class="fas fa-edit"></i></button>
+          <button class="save-btn">${
+            isNew
+              ? '<i class="fas fa-save"></i>'
+              : '<i class="fas fa-save"></i>'
+          }</button>
+          <button class="delete-btn"><i class="fas fa-trash"></i></button>
       </td>
     `;
 
@@ -153,9 +159,9 @@ document.addEventListener("DOMContentLoaded", function () {
       <td contenteditable="true"></td>
       <td contenteditable="true"></td>
       <td>
-          <button class="edit-btn" disabled>Sửa</button>
-          <button class="save-btn">Lưu</button>
-          <button class="delete-btn">Xóa</button>
+          <button class="edit-btn" disabled><i class="fas fa-edit"></i></button>
+          <button class="save-btn"><i class="fas fa-save"></i></button>
+          <button class="delete-btn"><i class="fas fa-trash"></i></button>
       </td>
     `;
 

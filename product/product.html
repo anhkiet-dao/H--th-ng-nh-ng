@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+    />
     <title>Bảng Sản Phẩm</title>
     <link rel="stylesheet" href="product.css" />
   </head>
@@ -10,15 +14,31 @@
     <div class="container">
       <nav>
         <ul class="menu">
-          <li><a href="../tinhtien/index.html">Tính tiền</a></li>
-          <li><a href="product.html">Sản phẩm</a></li>
-          <li><a href="../Doanhthu/revenue.html">Doanh thu</a></li>
-          <li><a href="../khuyenmai/discount.html">Khuyến mãi</a></li>
+          <li>
+            <a href="../tinhtien/index.html"
+              ><i class="fas fa-calculator"></i> Tính tiền</a
+            >
+          </li>
+          <li>
+            <a href="product.html"
+              ><i class="fas fa-shopping-basket"></i> Sản phẩm</a
+            >
+          </li>
+          <li>
+            <a href="../Doanhthu/revenue.html"
+              ><i class="fas fa-chart-line"></i> Doanh thu</a
+            >
+          </li>
+          <li>
+            <a href="../khuyenmai/discount.html"
+              ><i class="fas fa-percent"></i> Khuyến mãi</a
+            >
+          </li>
         </ul>
       </nav>
 
       <h2>Danh sách sản phẩm</h2>
-      <button id="addRowBtn">Thêm</button>
+      <button id="addRowBtn"><i class="fa-regular fa-square-plus"></i></button>
 
       <table>
         <thead>
@@ -39,9 +59,11 @@
             <td contenteditable="false">10/10/2020</td>
             <td contenteditable="false">10</td>
             <td>
-              <button class="edit-btn">Sửa</button>
-              <button class="save-btn" disabled>Lưu</button>
-              <button class="delete-btn">Xóa</button>
+              <button class="edit-btn"><i class="fas fa-edit"></i></button>
+              <button class="save-btn" disabled>
+                <i class="fas fa-save"></i>
+              </button>
+              <button class="delete-btn"><i class="fas fa-trash"></i></button>
             </td>
           </tr>
         </tbody>

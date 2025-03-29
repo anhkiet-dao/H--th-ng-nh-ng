@@ -34,6 +34,9 @@ nav {
   list-style-type: none;
   padding: 0;
   margin: 0;
+  display: flex; /* Sử dụng flexbox */
+  justify-content: flex-start; /* Căn menu về bên trái */
+  align-items: center; /* Căn giữa theo chiều dọc */
 }
 
 .menu li {
@@ -55,6 +58,17 @@ nav {
 .menu a:hover {
   background-color: #0056b3;
   transform: scale(1.1);
+}
+
+/* Nút 9 chấm */
+.menu-icon {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  left: 10px;
 }
 
 label {
@@ -91,14 +105,14 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  border: 1px solid black; 
+  border: 1px solid black;
 }
 
 th,
 td {
   padding: 10px;
   text-align: center;
-  border: 1px solid black; 
+  border: 1px solid black;
 }
 
 th {
@@ -116,8 +130,8 @@ button,
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
-  margin: 10px auto; 
-  display: block; 
+  margin: 10px auto;
+  display: block;
   text-align: center;
 }
 

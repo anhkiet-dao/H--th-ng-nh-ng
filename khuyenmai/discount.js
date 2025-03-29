@@ -74,8 +74,8 @@ document.addEventListener("DOMContentLoaded", function () {
       <td contenteditable="false">${product.datestart || ""}</td>
       <td contenteditable="false">${product.dateend || ""}</td>
       <td>
-        <button class="edit-btn">Sửa</button>
-        <button class="save-btn" disabled>Lưu</button>
+        <button class="edit-btn"><i class="fas fa-edit"></i></button>
+        <button class="save-btn" disabled><i class="fas fa-save"></i></button>
       </td>
     `;
 

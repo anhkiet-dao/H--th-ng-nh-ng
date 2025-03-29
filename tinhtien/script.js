@@ -6,6 +6,7 @@ import {
   child,
   push,
   set,
+  remove,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
 // Cấu hình Firebase
@@ -56,12 +57,9 @@ async function layThongTinSanPham(maSP, soLuong) {
     const productData = productSnapshot.val();
     const giaSP = productData.price || 0;
 
-    const discountSnapshot = await get(
-      child(ref(database), `discounts/${maSP}`)
-    );
-    const giamGia = discountSnapshot.exists()
-      ? discountSnapshot.val().discount || 0
-      : 0;
+    const discountRef = child(ref(database), `discounts/${maSP}/discount`);
+    const discountSnapshot = await get(discountRef);
+    const giamGia = discountSnapshot.exists() ? discountSnapshot.val() : 0;
 
     themSanPhamVaoBang(maSP, productData.name, giaSP, soLuong, giamGia);
   } catch (error) {
@@ -145,7 +143,7 @@ function tinhTien() {
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
 
-function thanhToan() {
+async function thanhToan() {
   const rows = [...document.querySelectorAll("#sanPhamTable tbody tr")];
   if (!rows.length) return alert("Chưa có sản phẩm nào để thanh toán!");
 
@@ -154,20 +152,30 @@ function thanhToan() {
     tenSP: row.cells[1].textContent,
     giaSP: parseFloat(row.cells[2].textContent.replace(/\D/g, "")),
     soLuong: parseInt(row.cells[3].textContent),
+    giamGia: parseFloat(row.cells[5].textContent.replace(/\D/g, "")),
+    tongGia: parseFloat(row.cells[4].textContent.replace(/\D/g, "")),
     thanhToan: parseFloat(row.cells[6].textContent.replace(/\D/g, "")),
   }));
 
-  set(push(ref(database, "donHang")), {
-    thoiGian: layGioVietNam(),
-    danhSachSanPham: donHang,
-    tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
-  })
-    .then(() => {
-      alert("Thanh toán thành công!");
-      document.querySelector("#sanPhamTable tbody").innerHTML = "";
-      updateTotal();
-    })
-    .catch((error) => console.error("Lỗi khi lưu vào Firebase:", error));
+  try {
+    // Lưu đơn hàng mới vào Firebase
+    await set(push(ref(database, "donHang")), {
+      thoiGian: layGioVietNam(),
+      danhSachSanPham: donHang,
+      tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
+    });
+
+    // Xóa tất cả đơn hàng trong "order"
+    await remove(ref(database, "order"));
+
+    alert("Thanh toán thành công!");
+
+    // Xóa dữ liệu trên giao diện
+    document.querySelector("#sanPhamTable tbody").innerHTML = "";
+    updateTotal();
+  } catch (error) {
+    console.error("Lỗi khi thanh toán:", error);
+  }
 }
 
 document.addEventListener("DOMContentLoaded", () => {

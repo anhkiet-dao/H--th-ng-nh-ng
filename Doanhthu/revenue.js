@@ -78,7 +78,9 @@ function viewDetails(orderItems) {
         <td>${item.tenSP}</td>
         <td>${item.giaSP.toLocaleString()}</td>
         <td>${item.soLuong}</td>
+        <td>${(item.giaSP * item.soLuong).toLocaleString()}</td>
         <td>${item.giamGia}%</td>
+        <td>${item.thanhToan.toLocaleString()}</td>
       </tr>`;
     modalBody.innerHTML += row;
   });

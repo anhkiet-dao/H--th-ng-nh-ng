@@ -21,82 +21,121 @@ const firebaseConfig = {
   measurementId: "G-QVQ8RGM1J1",
 };
 
-// Khởi tạo Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// Xuất database để sử dụng trong file khác
 export { database, ref, push, set };
 
 function layGioVietNam() {
-  const now = new Date();
-  return now.toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
+  return new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-document.getElementById("maSP").addEventListener("input", async function () {
-  const maSP = this.value.trim();
-  if (!maSP) return;
-
+async function layTatCaDonHang() {
   try {
-    const dbRef = ref(database);
-    const productsSnapshot = await get(child(dbRef, "products"));
+    const orderSnapshot = await get(child(ref(database), "order"));
+    if (!orderSnapshot.exists()) return;
 
-    if (!productsSnapshot.exists()) {
-      console.warn("Không có dữ liệu sản phẩm.");
-      return;
-    }
+    const tableBody = document.querySelector("#sanPhamTable tbody");
+    tableBody.innerHTML = "";
 
-    let productId = null;
-    productsSnapshot.forEach((childSnapshot) => {
-      const product = childSnapshot.val();
-      if (product.id === maSP) {
-        productId = childSnapshot.key;
-      }
+    orderSnapshot.forEach((childSnapshot) => {
+      const { masp, soluong } = childSnapshot.val();
+      layThongTinSanPham(masp, soluong);
     });
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu đơn hàng:", error);
+  }
+}
 
-    if (!productId) {
-      console.warn("Không tìm thấy sản phẩm với mã:", maSP);
-      return;
-    }
+async function layThongTinSanPham(maSP, soLuong) {
+  if (!maSP) return;
+  try {
+    const productSnapshot = await get(child(ref(database), `products/${maSP}`));
+    if (!productSnapshot.exists()) return;
 
-    // Lấy thông tin sản phẩm
-    const productSnapshot = await get(child(dbRef, `products/${productId}`));
-    if (productSnapshot.exists()) {
-      const product = productSnapshot.val();
-      document.getElementById("tenSP").value = product.name || "";
-      document.getElementById("giaSP").value = product.price || 0;
-    } else {
-      document.getElementById("tenSP").value = "";
-      document.getElementById("giaSP").value = "";
-    }
+    const productData = productSnapshot.val();
+    const giaSP = productData.price || 0;
 
-    // Lấy thông tin giảm giá
-    const discountSnapshot = await get(child(dbRef, `discounts/${productId}`));
-    if (discountSnapshot.exists()) {
-      const discount = discountSnapshot.val();
-      document.getElementById("giamGia").value = discount.discount || 0;
-    } else {
-      document.getElementById("giamGia").value = 0;
-    }
+    const discountSnapshot = await get(
+      child(ref(database), `discounts/${maSP}`)
+    );
+    const giamGia = discountSnapshot.exists()
+      ? discountSnapshot.val().discount || 0
+      : 0;
 
-    if (document.getElementById("soLuong").value) {
-      tinhTien();
-    }
+    themSanPhamVaoBang(maSP, productData.name, giaSP, soLuong, giamGia);
+  } catch (error) {
+    console.error("Lỗi khi lấy dữ liệu sản phẩm:", error);
+  }
+}
+
+function themSanPhamVaoBang(maSP, tenSP, giaSP, soLuong, giamGia) {
+  const tongGia = giaSP * soLuong;
+  const thanhToan = tongGia - (tongGia * giamGia) / 100;
+
+  const newRow = document.querySelector("#sanPhamTable tbody").insertRow();
+  newRow.innerHTML = `
+    <td>${maSP}</td>
+    <td>${tenSP}</td>
+    <td>${giaSP.toLocaleString()}</td>
+    <td>${soLuong}</td>
+    <td>${tongGia.toLocaleString()}</td>
+    <td>${giamGia}</td>
+    <td>${thanhToan.toLocaleString()}</td>`;
+
+  updateTotal();
+}
+
+function updateTotal() {
+  let total = [...document.querySelectorAll("#sanPhamTable tbody tr")].reduce(
+    (sum, row) => sum + parseFloat(row.cells[6].textContent.replace(/\D/g, "")),
+    0
+  );
+
+  document.getElementById(
+    "tongThanhToan"
+  ).innerHTML = `<strong>${total.toLocaleString()} VND</strong>`;
+}
+
+async function laySanPhamTheoMa(maSP) {
+  if (!maSP) return;
+  try {
+    const productSnapshot = await get(child(ref(database), `products/${maSP}`));
+    if (!productSnapshot.exists()) return;
+
+    const product = productSnapshot.val();
+    document.getElementById("tenSP").value = product.name || "";
+    document.getElementById("giaSP").value = product.price || 0;
+
+    const discountSnapshot = await get(
+      child(ref(database), `discounts/${maSP}`)
+    );
+    document.getElementById("giamGia").value = discountSnapshot.exists()
+      ? discountSnapshot.val().discount || 0
+      : 0;
+
+    tinhTien();
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu:", error);
   }
+}
+
+document.getElementById("maSP").addEventListener("input", function () {
+  laySanPhamTheoMa(this.value.trim());
+});
+
+document.querySelectorAll(".calculate-input").forEach((input) => {
+  input.addEventListener("input", tinhTien);
 });
 
 function tinhTien() {
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
   const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
   const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
-
-  if (!giaSP || !soLuong) return; // Nếu thiếu giá hoặc số lượng thì không làm gì
+  if (!giaSP || !soLuong) return;
 
   const tongGia = giaSP * soLuong;
-  const tienGiam = tongGia * (giamGia / 100);
-  const thanhToan = tongGia - tienGiam;
+  const thanhToan = tongGia - (tongGia * giamGia) / 100;
 
   document.getElementById(
     "tongGia"
@@ -106,126 +145,32 @@ function tinhTien() {
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
 
-document.querySelectorAll(".calculate-input").forEach((input) => {
-  input.addEventListener("input", tinhTien);
-});
-
-function resetForm() {
-  document.getElementById("maSP").value = "";
-  document.getElementById("tenSP").value = "";
-  document.getElementById("giaSP").value = "";
-  document.getElementById("soLuong").value = "";
-  document.getElementById("giamGia").value = "";
-  document.getElementById("tongGia").textContent = "0 VND";
-  document.getElementById("thanhToan").textContent = "0 VND";
-}
-
-function themSanPhamVaoBang() {
-  const maSP = document.getElementById("maSP").value.trim();
-  const tenSP = document.getElementById("tenSP").value.trim();
-  const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
-  const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
-  const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
-
-  if (!maSP || !tenSP || giaSP <= 0 || soLuong <= 0) return;
-
-  const tongGia = giaSP * soLuong;
-  const tienGiam = tongGia * (giamGia / 100);
-  const thanhToan = tongGia - tienGiam;
-
-  const table = document.querySelector("#sanPhamTable tbody");
-  const newRow = table.insertRow();
-
-  newRow.insertCell(0).textContent = maSP;
-  newRow.insertCell(1).textContent = tenSP;
-  newRow.insertCell(2).textContent = `${giaSP.toLocaleString()}`;
-  newRow.insertCell(3).textContent = soLuong;
-  newRow.insertCell(4).textContent = `${tongGia.toLocaleString()}`;
-  newRow.insertCell(5).textContent = `${giamGia}`;
-  newRow.insertCell(6).textContent = `${thanhToan.toLocaleString()}`;
-
-  updateTotal();
-}
-
-// Cập nhật tổng thanh toán
-function updateTotal() {
-  let total = 0;
-  document.querySelectorAll("#sanPhamTable tbody tr").forEach((row) => {
-    const amount = parseFloat(row.cells[6].textContent.replace(/[^\d.]/g, ""));
-    total += amount;
-  });
-  document.getElementById(
-    "tongThanhToan"
-  ).innerHTML = `<strong>${total.toLocaleString()} VND</strong>`;
-}
-
 function thanhToan() {
-  const rows = document.querySelectorAll("#sanPhamTable tbody tr");
-  if (rows.length === 0) {
-    alert("Chưa có sản phẩm nào để thanh toán!");
-    return;
-  }
+  const rows = [...document.querySelectorAll("#sanPhamTable tbody tr")];
+  if (!rows.length) return alert("Chưa có sản phẩm nào để thanh toán!");
 
-  const donHang = [];
-  rows.forEach((row) => {
-    const sanPham = {
-      maSP: row.cells[0].textContent,
-      tenSP: row.cells[1].textContent,
-      giaSP: parseFloat(row.cells[2].textContent.replace(/[^\d.]/g, "")),
-      soLuong: parseInt(row.cells[3].textContent),
-      tongGia: parseFloat(row.cells[4].textContent.replace(/[^\d.]/g, "")),
-      giamGia: parseFloat(row.cells[5].textContent.replace("%", "")),
-      thanhToan: parseFloat(row.cells[6].textContent.replace(/[^\d.]/g, "")),
-    };
-    donHang.push(sanPham);
-  });
+  const donHang = rows.map((row) => ({
+    maSP: row.cells[0].textContent,
+    tenSP: row.cells[1].textContent,
+    giaSP: parseFloat(row.cells[2].textContent.replace(/\D/g, "")),
+    soLuong: parseInt(row.cells[3].textContent),
+    thanhToan: parseFloat(row.cells[6].textContent.replace(/\D/g, "")),
+  }));
 
-  const thoiGianVietNam = layGioVietNam();
-
-  // Debug dữ liệu trước khi lưu vào Firebase
-  console.log("Dữ liệu gửi lên Firebase:", {
-    thoiGian: new Date().toISOString(),
-    danhSachSanPham: donHang,
-    tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
-  });
-
-  // Đẩy dữ liệu lên Firebase
-  const donHangRef = push(ref(database, "donHang"));
-  set(donHangRef, {
-    thoiGian: thoiGianVietNam,
+  set(push(ref(database, "donHang")), {
+    thoiGian: layGioVietNam(),
     danhSachSanPham: donHang,
     tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
   })
     .then(() => {
       alert("Thanh toán thành công!");
       document.querySelector("#sanPhamTable tbody").innerHTML = "";
-      document.getElementById("tongThanhToan").innerHTML =
-        "<strong>0 VND</strong>";
-
-      document.getElementById("maSP").value = "";
-      document.getElementById("tenSP").value = "";
-      document.getElementById("giaSP").value = "";
-      document.getElementById("soLuong").value = "";
-      document.getElementById("giamGia").value = "";
-      document.getElementById("tongGia").textContent = "0 VND";
-      document.getElementById("thanhToan").textContent = "0 VND";
+      updateTotal();
     })
-    .catch((error) => {
-      console.error("Lỗi khi lưu vào Firebase:", error);
-    });
+    .catch((error) => console.error("Lỗi khi lưu vào Firebase:", error));
 }
 
-// Thêm sự kiện khi DOM tải xong
 document.addEventListener("DOMContentLoaded", () => {
-  document.querySelectorAll(".calculate-input").forEach((input) => {
-    input.addEventListener("input", tinhTien);
-  });
-
-  // Sự kiện thêm sản phẩm khi nhấn Enter ở ô giảm giá
-  document.getElementById("soLuong").addEventListener("blur", function () {
-    themSanPhamVaoBang();
-    resetForm();
-  });
-  // Sự kiện thanh toán
+  layTatCaDonHang();
   document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
 });

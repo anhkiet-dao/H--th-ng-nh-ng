@@ -70,6 +70,7 @@ async function loadRevenueData() {
 // Hiển thị chi tiết đơn hàng trong bảng modal
 function viewDetails(orderItems) {
   const modalBody = document.getElementById("modalBody");
+  const mainContent = document.getElementById("mainContent");
   modalBody.innerHTML = "";
   orderItems.forEach((item, index) => {
     const row = `<tr>
@@ -84,12 +85,14 @@ function viewDetails(orderItems) {
       </tr>`;
     modalBody.innerHTML += row;
   });
-  document.getElementById("detailModal").style.display = "block";
-}
 
-// Đóng modal
-document.getElementById("backButton").addEventListener("click", function () {
-  document.getElementById("detailModal").style.display = "none";
-});
+  mainContent.style.display = "none";
+  document.getElementById("detailModal").style.display = "block";
+
+  document.getElementById("backButton").addEventListener("click", function () {
+    mainContent.style.display = "block";
+    document.getElementById("detailModal").style.display = "none";
+  });
+}
 
 document.addEventListener("DOMContentLoaded", loadRevenueData);

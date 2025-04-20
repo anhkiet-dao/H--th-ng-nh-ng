@@ -11,13 +11,29 @@
     <link rel="stylesheet" href="revenue.css" />
   </head>
   <body>
-    <div class="container">
+    <div id="mainContent" class="container">
       <nav>
         <ul class="menu">
-          <li><a href="../tinhtien/index.html"><i class="fas fa-calculator"></i> Tính tiền</a></li>
-          <li><a href="../product/product.html"><i class="fas fa-shopping-basket"></i> Sản phẩm</a></li>
-          <li><a href="revenue.html"><i class="fas fa-chart-line"></i> Doanh thu</a></li>
-          <li><a href="../khuyenmai/discount.html"><i class="fas fa-percent"></i> Khuyến mãi</a></li>
+          <li>
+            <a href="../tinhtien/index.html"
+              ><i class="fas fa-calculator"></i> Tính tiền</a
+            >
+          </li>
+          <li>
+            <a href="../product/product.html"
+              ><i class="fas fa-shopping-basket"></i> Sản phẩm</a
+            >
+          </li>
+          <li>
+            <a href="revenue.html"
+              ><i class="fas fa-chart-line"></i> Doanh thu</a
+            >
+          </li>
+          <li>
+            <a href="../khuyenmai/discount.html"
+              ><i class="fas fa-percent"></i> Khuyến mãi</a
+            >
+          </li>
         </ul>
       </nav>
       <h3>Doanh thu</h3>
@@ -34,25 +50,26 @@
       <h3>
         Tổng tiền: <span id="tongThanhToan"><strong>0 VND</strong></span>
       </h3>
-      <div id="detailModal" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); background: white; padding: 20px; border: 1px solid #ccc;">
-        <h3>Chi tiết đơn hàng</h3>
-        <table border="1">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Mã SP</th>
-              <th>Tên SP</th>
-              <th>Giá SP (VND)</th>
-              <th>Số Lượng</th>
-              <th>Tổng Giá (VND)</th>
-              <th>Giảm Giá (%)</th>
-              <th>Thanh toán (VND)</th>
-            </tr>
-          </thead>
-          <tbody id="modalBody"></tbody>
-        </table>        
-        <button id="backButton"><i class="fas fa-arrow-left"></i></button>
-      </div>
+    </div>
+    <div id="detailModal" style="display: none">
+      <h3>Chi tiết đơn hàng</h3>
+      <table border="1">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Mã SP</th>
+            <th>Tên SP</th>
+            <th>Giá SP (VND)</th>
+            <th>Số Lượng</th>
+            <th>Tổng Giá (VND)</th>
+            <th>Giảm Giá (%)</th>
+            <th>Thanh toán (VND)</th>
+          </tr>
+        </thead>
+        <tbody id="modalBody"></tbody>
+      </table>
+      <button id="backButton"><i class="fas fa-arrow-left"></i></button>
+    </div>
     <script type="module" src="revenue.js"></script>
   </body>
 </html>

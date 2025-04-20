@@ -164,6 +164,7 @@ async function thanhToan() {
     await remove(ref(database, "order"));
 
     alert("Thanh toán thành công!");
+    hienThiHoaDon(donHang);
 
     // Xóa dữ liệu trên giao diện
     document.querySelector("#sanPhamTable tbody").innerHTML = "";
@@ -177,3 +178,45 @@ document.addEventListener("DOMContentLoaded", () => {
   theoDoiDonHangMoi();
   document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
 });
+
+function hienThiHoaDon(donHang) {
+  const hoaDonDiv = document.getElementById("hoaDon");
+  const mainContent = document.getElementById("mainContent");
+  const tbody = document.getElementById("hoaDonNoiDung");
+  const thoiGianSpan = document.getElementById("hoaDonThoiGian");
+  const tongTienSpan = document.getElementById("hoaDonTongTien");
+  const soHoaDonSpan = document.getElementById("soHoaDon");
+
+  const soHoaDon = `${new Date()
+    .toISOString()
+    .slice(0, 10)
+    .replace(/-/g, "")}${Math.floor(10000 + Math.random() * 90000)}`;
+  soHoaDonSpan.textContent = soHoaDon;
+
+  tbody.innerHTML = "";
+  let tongTien = 0;
+
+  donHang.forEach((sp) => {
+    const row = document.createElement("tr");
+    row.innerHTML = `
+      <td>${sp.maSP}</td>
+      <td>${sp.tenSP}</td>
+      <td>${sp.giaSP.toLocaleString()}</td>
+      <td>${sp.soLuong}</td>
+      <td>${sp.giamGia}</td>
+      <td>${sp.thanhToan.toLocaleString()}</td>
+    `;
+    tbody.appendChild(row);
+    tongTien += sp.thanhToan;
+  });
+
+  thoiGianSpan.textContent = layGioVietNam();
+  tongTienSpan.textContent = tongTien.toLocaleString();
+  mainContent.style.display = "none";
+  hoaDonDiv.style.display = "block";
+
+  document.getElementById("printButton").addEventListener("click", function () {
+    hoaDonDiv.style.display = "none";
+    mainContent.style.display = "block";
+  });
+}

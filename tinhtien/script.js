@@ -141,6 +141,12 @@ function tinhTien() {
 async function thanhToan() {
   const rows = [...document.querySelectorAll("#sanPhamTable tbody tr")];
   if (!rows.length) return alert("Chưa có sản phẩm nào để thanh toán!");
+  const soHoaDonSpan = document.getElementById("soHoaDon");
+  const soHoaDon = `${new Date()
+    .toISOString()
+    .slice(0, 10)
+    .replace(/-/g, "")}${Math.floor(10000 + Math.random() * 90000)}`;
+  soHoaDonSpan.textContent = soHoaDon;
 
   const donHang = rows.map((row) => ({
     maSP: row.cells[0].textContent,
@@ -155,6 +161,7 @@ async function thanhToan() {
   try {
     // Lưu đơn hàng mới vào Firebase
     await set(push(ref(database, "donHang")), {
+      soHoaDon: soHoaDon,
       thoiGian: layGioVietNam(),
       danhSachSanPham: donHang,
       tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
@@ -185,13 +192,6 @@ function hienThiHoaDon(donHang) {
   const tbody = document.getElementById("hoaDonNoiDung");
   const thoiGianSpan = document.getElementById("hoaDonThoiGian");
   const tongTienSpan = document.getElementById("hoaDonTongTien");
-  const soHoaDonSpan = document.getElementById("soHoaDon");
-
-  const soHoaDon = `${new Date()
-    .toISOString()
-    .slice(0, 10)
-    .replace(/-/g, "")}${Math.floor(10000 + Math.random() * 90000)}`;
-  soHoaDonSpan.textContent = soHoaDon;
 
   tbody.innerHTML = "";
   let tongTien = 0;

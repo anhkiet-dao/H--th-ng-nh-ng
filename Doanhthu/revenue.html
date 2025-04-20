@@ -36,7 +36,7 @@
           </li>
         </ul>
       </nav>
-      <h3>Doanh thu</h3>
+      <h2>Doanh thu</h2>
       <table id="sanPhamTable">
         <thead>
           <tr>
@@ -52,11 +52,12 @@
       </h3>
     </div>
     <div id="detailModal" style="display: none">
-      <h3>Chi tiết đơn hàng</h3>
+      <h2>Chi tiết đơn hàng</h2>
+      <div id="soHoaDon"></div>
+      <div id="thoiGian"></div>
       <table border="1">
         <thead>
           <tr>
-            <th>#</th>
             <th>Mã SP</th>
             <th>Tên SP</th>
             <th>Giá SP (VND)</th>
@@ -66,6 +67,7 @@
             <th>Thanh toán (VND)</th>
           </tr>
         </thead>
+        <p id="Tongtien"></p>
         <tbody id="modalBody"></tbody>
       </table>
       <button id="backButton"><i class="fas fa-arrow-left"></i></button>

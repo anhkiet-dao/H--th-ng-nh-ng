@@ -9,22 +9,33 @@ body {
 
 .container {
   background: white;
-  padding: 20px;
+  padding: 30px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  width: 600px;
-  margin-top: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 700px;
+  margin-top: 30px;
+  text-align: center;
 }
 
 h2,
 h3 {
+  color: #333;
+}
+
+h2 {
   text-align: center;
+  margin-bottom: 20px;
+}
+
+h3 {
+  text-align: center;
+  margin-top: 10px;
   color: #333;
 }
 
 nav {
   background-color: #29a4f1;
-  padding: 5px;
+  padding: 10px;
   border-radius: 5px;
   margin-bottom: 20px;
   text-align: center;
@@ -34,23 +45,20 @@ nav {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  display: flex; /* Sử dụng flexbox */
-  justify-content: flex-start; /* Căn menu về bên trái */
-  align-items: center; /* Căn giữa theo chiều dọc */
+  display: flex;
+  justify-content: center;
 }
 
 .menu li {
   display: inline-block;
   margin: 0 15px;
-  position: relative;
 }
 
 .menu a {
   text-decoration: none;
   color: white;
   font-weight: bold;
-  padding: 5px 10px;
-  display: inline-block;
+  padding: 10px 15px;
   transition: all 0.3s ease-in-out;
   border-radius: 5px;
 }
@@ -71,19 +79,23 @@ table {
   width: 100%;
   border-collapse: collapse;
   margin-top: 10px;
-  border: 1px solid black;
 }
 
 th,
 td {
-  padding: 7px;
+  padding: 8px;
   text-align: center;
-  border: 1px solid black; /* Viền từng ô */
+  border: 1px solid #ddd;
 }
 
 th {
   background-color: #007bff;
   color: white;
+}
+
+td {
+  color: #333;
+  background-color: #f9f9f9;
 }
 
 button,
@@ -95,10 +107,9 @@ button,
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 14px;
+  font-size: 16px;
   margin: 5px auto;
   display: block;
-  text-align: center;
 }
 
 button:hover,
@@ -109,12 +120,38 @@ button:hover,
 #backButton {
   width: 10%;
 }
+
 #detailModal {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   background: white;
-  padding: 20px;
-  border: 1px solid #ccc;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  width: 600px;
+}
+
+#soHoaDon,
+#thoiGian,
+#Tongtien {
+  font-weight: bold;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+#soHoaDon {
+  font-size: 16px;
+  color: #333;
+}
+
+#thoiGian {
+  font-size: 16px;
+  color: #333;
+}
+
+#Tongtien {
+  font-size: 16px;
+  color: #333;
 }

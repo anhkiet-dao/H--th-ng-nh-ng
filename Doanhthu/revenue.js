@@ -53,7 +53,13 @@ async function loadRevenueData() {
       detailButton.innerHTML = '<i class="fas fa-info-circle"></i>';
       detailButton.classList.add("detail-btn");
 
-      detailButton.onclick = () => viewDetails(order.danhSachSanPham);
+      detailButton.onclick = () =>
+        viewDetails(
+          order.danhSachSanPham,
+          order.soHoaDon,
+          order.thoiGian,
+          order.tongTien
+        );
       row.insertCell(2).appendChild(detailButton);
 
       totalRevenue += order.tongTien;
@@ -68,13 +74,17 @@ async function loadRevenueData() {
 }
 
 // Hiển thị chi tiết đơn hàng trong bảng modal
-function viewDetails(orderItems) {
+function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
   const modalBody = document.getElementById("modalBody");
   const mainContent = document.getElementById("mainContent");
+  const soHoaDonElement = document.getElementById("soHoaDon");
+  const thoiGianElement = document.getElementById("thoiGian");
+  const TongtienElement = document.getElementById("Tongtien");
   modalBody.innerHTML = "";
+  soHoaDonElement.textContent = `Số hóa đơn: ${soHoaDon}`;
+  thoiGianElement.textContent = `Thời gian: ${thoiGian}`;
   orderItems.forEach((item, index) => {
     const row = `<tr>
-        <td>${index + 1}</td>
         <td>${item.maSP}</td>
         <td>${item.tenSP}</td>
         <td>${item.giaSP.toLocaleString()}</td>
@@ -85,6 +95,8 @@ function viewDetails(orderItems) {
       </tr>`;
     modalBody.innerHTML += row;
   });
+
+  TongtienElement.textContent = `Tổng tiền: ${tongTien.toLocaleString()} VND`;
 
   mainContent.style.display = "none";
   document.getElementById("detailModal").style.display = "block";

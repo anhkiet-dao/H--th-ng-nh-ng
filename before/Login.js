@@ -11,3 +11,9 @@ function login() {
     errorMessage.textContent = "Tên đăng nhập hoặc mật khẩu sai!";
   }
 }
+window.addEventListener("keydown", function (event) {
+  if (event.key === "Enter") {
+    event.preventDefault();
+    login();
+  }
+});

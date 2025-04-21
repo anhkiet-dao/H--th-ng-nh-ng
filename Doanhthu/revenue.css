@@ -177,3 +177,53 @@ button:hover,
 .logout-btn a:hover {
   background-color: #c0392b;
 }
+
+.filter-container {
+  display: flex;
+  align-items: center;
+  gap: 8px; /* Giảm tối đa khoảng cách */
+  margin-bottom: 20px;
+}
+
+.filter-container label {
+  font-size: 14px;
+  color: #333;
+  font-weight: 500;
+  white-space: nowrap;
+  margin-right: 0px; /* Kéo label sát vào input */
+}
+
+.filter-container #filterDate {
+  padding: 5px 6px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #555;
+  background-color: #f9f9f9;
+  height: 30px;
+  width: 150px;
+  box-sizing: border-box;
+}
+
+.compact-btn {
+  padding: 3px 6px;
+  width: 150px;
+  height: 30px;
+  font-size: 16px;
+  margin: 0;
+}
+
+.filter-container #filterButton {
+  background-color: #4a90e2;
+  color: white;
+}
+
+.filter-container #clearButton {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.filter-container button i {
+  font-size: 14px !important;
+  margin-right: 3px !important;
+}

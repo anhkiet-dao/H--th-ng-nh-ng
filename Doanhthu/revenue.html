@@ -41,7 +41,17 @@
           </li>
         </ul>
       </nav>
-      <h2>Doanh thu</h2>
+      <h2>Lịch sử</h2>
+      <div class="filter-container">
+        <label for="filterDate"><strong>Chọn ngày:</strong></label>
+        <input type="date" id="filterDate" placeholder="mm / dd / yyyy" />
+        <button id="filterButton" class="compact-btn">
+          <i class="fas fa-search"></i> Lọc
+        </button>
+        <button id="clearButton" class="compact-btn">
+          <i class="fa-regular fa-circle-xmark"></i> Xóa
+        </button>
+      </div>
       <table id="sanPhamTable">
         <thead>
           <tr>

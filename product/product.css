@@ -120,3 +120,23 @@ button {
   background-color: #0056b3;
   transform: scale(1.05);
 }
+
+.logout-btn a {
+  background-color: #e94a4a;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  text-decoration: none;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+}
+
+.logout-btn a i {
+  margin-right: 0px;
+}
+
+.logout-btn a:hover {
+  background-color: #c0392b;
+}

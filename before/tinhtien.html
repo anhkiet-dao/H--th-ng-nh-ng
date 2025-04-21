@@ -8,39 +8,18 @@
       href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
     />
     <title>Web Tính Tiền</title>
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="tinhtien.css" />
   </head>
   <body>
     <div id="mainContent" class="container">
       <nav>
         <ul class="menu">
-          <li>
-            <a href="index.html"><i class="fas fa-calculator"></i> Tính tiền</a>
-          </li>
-          <li>
-            <a href="../product/product.html"
-              ><i class="fas fa-shopping-basket"></i> Sản phẩm</a
-            >
-          </li>
-          <li>
-            <a href="../Doanhthu/revenue.html"
-              ><i class="fas fa-chart-line"></i> Doanh thu</a
-            >
-          </li>
-          <li>
-            <a href="../khuyenmai/discount.html"
-              ><i class="fas fa-percent"></i> Khuyến mãi</a
-            >
-          </li>
-
-          <li class="logout-btn">
-            <a href="../before/Login.html"
-              ><i class="fas fa-sign-out-alt"></i
-            ></a>
+          <span class="welcome-text">Hệ thống tính tiền của siêu thị UIT!</span>
+          <li class="logout-button">
+            <a href="./Login.html"><i class="fas fa-sign-out-alt"></i></a>
           </li>
         </ul>
       </nav>
-
       <h2 style="display: none">Tính tiền sản phẩm</h2>
       <div class="form-group" style="display: none">
         <label for="maSP">Mã Sản Phẩm:</label>
@@ -115,6 +94,6 @@
       <button id="printButton"><i class="fa-solid fa-print"></i></button>
     </div>
 
-    <script type="module" src="script.js"></script>
+    <script type="module" src="tinhtien.js"></script>
   </body>
 </html>

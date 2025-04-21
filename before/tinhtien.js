@@ -170,6 +170,7 @@ async function thanhToan() {
     // Xóa tất cả đơn hàng trong "order"
     await remove(ref(database, "order"));
 
+    alert("Thanh toán thành công!");
     hienThiHoaDon(donHang);
 
     // Xóa dữ liệu trên giao diện

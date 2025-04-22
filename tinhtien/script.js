@@ -32,7 +32,6 @@ function layGioVietNam() {
   return new Date().toLocaleString("vi-VN", { timeZone: "Asia/Ho_Chi_Minh" });
 }
 
-// Hàm lắng nghe đơn hàng mới được thêm vào "order"
 function theoDoiDonHangMoi() {
   const orderRef = ref(database, "order");
 
@@ -42,7 +41,15 @@ function theoDoiDonHangMoi() {
   });
 }
 
-// Hàm lấy thông tin sản phẩm theo mã sản phẩm
+function showNotification(message) {
+  const notification = document.getElementById("notification");
+  notification.textContent = message;
+  notification.style.display = "block";
+
+  const newNotification = notification.cloneNode(true);
+  notification.parentNode.replaceChild(newNotification, notification);
+}
+
 async function layThongTinSanPham(maSP, soLuong) {
   if (!maSP) return;
   try {
@@ -140,7 +147,8 @@ function tinhTien() {
 
 async function thanhToan() {
   const rows = [...document.querySelectorAll("#sanPhamTable tbody tr")];
-  if (!rows.length) return alert("Chưa có sản phẩm nào để thanh toán!");
+  if (!rows.length)
+    return showNotification("Chưa có sản phẩm nào để thanh toán!");
   const soHoaDonSpan = document.getElementById("soHoaDon");
   const soHoaDon = `${new Date()
     .toISOString()
@@ -159,7 +167,6 @@ async function thanhToan() {
   }));
 
   try {
-    // Lưu đơn hàng mới vào Firebase
     await set(push(ref(database, "donHang")), {
       soHoaDon: soHoaDon,
       thoiGian: layGioVietNam(),
@@ -167,12 +174,10 @@ async function thanhToan() {
       tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
     });
 
-    // Xóa tất cả đơn hàng trong "order"
     await remove(ref(database, "order"));
 
     hienThiHoaDon(donHang);
 
-    // Xóa dữ liệu trên giao diện
     document.querySelector("#sanPhamTable tbody").innerHTML = "";
     updateTotal();
   } catch (error) {

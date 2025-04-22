@@ -214,11 +214,6 @@ button:hover,
   margin: 0;
 }
 
-/* .filter-container #filterButton {
-  background-color: #4a90e2;
-  color: white;
-} */
-
 .filter-container #clearButton,
 .filter-container #clearButtonMonth {
   background-color: #e74c3c;
@@ -247,7 +242,7 @@ button:hover,
   border-radius: 5px;
   font-weight: bold;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-  animation: fadeInOut 3s forwards;
+  animation: fadeInOut 1s forwards;
 }
 
 @keyframes fadeInOut {

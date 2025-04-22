@@ -193,7 +193,8 @@ button:hover,
   margin-right: 0px;
 }
 
-.filter-container #filterDate {
+.filter-container #filterDate,
+.filter-container #filterMonth {
   padding: 5px 6px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -213,16 +214,22 @@ button:hover,
   margin: 0;
 }
 
-.filter-container #filterButton {
+/* .filter-container #filterButton {
   background-color: #4a90e2;
   color: white;
-}
+} */
 
-.filter-container #clearButton {
+.filter-container #clearButton,
+.filter-container #clearButtonMonth {
   background-color: #e74c3c;
   color: white;
 }
 
+.filter-container #clearButton:hover,
+.filter-container #clearButtonMonth:hover {
+  background-color: #c0392b;
+  color: white;
+}
 .filter-container button i {
   font-size: 14px;
   margin-right: 3px;

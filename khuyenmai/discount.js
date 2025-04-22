@@ -53,8 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 id: product.id,
                 name: product.name,
                 discount: "",
-                datestart: "",
-                dateend: "",
+                Note: "",
               };
               set(discountRef, discountData);
             }
@@ -71,8 +70,7 @@ document.addEventListener("DOMContentLoaded", function () {
       <td>${product.id}</td>
       <td>${product.name}</td>
       <td contenteditable="false">${product.discount || ""}</td>
-      <td contenteditable="false">${product.datestart || ""}</td>
-      <td contenteditable="false">${product.dateend || ""}</td>
+      <td contenteditable="false">${product.Note || ""}</td>
       <td>
         <button class="edit-btn"><i class="fas fa-edit"></i></button>
         <button class="save-btn" disabled><i class="fas fa-save"></i></button>
@@ -108,8 +106,7 @@ document.addEventListener("DOMContentLoaded", function () {
       id: row.cells[0].textContent,
       name: row.cells[1].textContent,
       discount: row.cells[2].textContent,
-      datestart: row.cells[3].textContent,
-      dateend: row.cells[4].textContent,
+      Note: row.cells[3].textContent,
     };
 
     set(ref(database, `discounts/${productData.id}`), productData);

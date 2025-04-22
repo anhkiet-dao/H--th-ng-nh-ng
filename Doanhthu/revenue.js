@@ -21,23 +21,18 @@ const firebaseConfig = {
   measurementId: "G-QVQ8RGM1J1",
 };
 
-// Khởi tạo Firebase
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
-// Xuất database để sử dụng trong file khác
 export { database, ref, push, set };
 
-// Hàm chuẩn hóa ngày từ input date và từ Firebase
 function normalizeDate(dateStr, isFromFirebase = false) {
   if (!dateStr) return null;
 
-  // Nếu là từ input date (YYYY-MM-DD)
   if (!isFromFirebase && dateStr.includes("-")) {
     return dateStr;
   }
 
-  // Nếu là từ Firebase (HH:mm:ss DD/MM/YYYY)
   if (isFromFirebase) {
     const timeAndDate = dateStr.split(" ");
     if (timeAndDate.length < 2) return null;
@@ -50,6 +45,16 @@ function normalizeDate(dateStr, isFromFirebase = false) {
   }
 
   return null;
+}
+
+function showNotification(message) {
+  const notification = document.getElementById("notification");
+  notification.textContent = message;
+  notification.style.display = "block";
+
+  // Reset animation bằng cách tạo lại node
+  const newNotification = notification.cloneNode(true);
+  notification.parentNode.replaceChild(newNotification, notification);
 }
 
 async function loadRevenueData(selectedDate = null) {
@@ -66,7 +71,6 @@ async function loadRevenueData(selectedDate = null) {
     tableBody.innerHTML = "";
     let totalRevenue = 0;
 
-    // Chuẩn hóa ngày được chọn (từ input date)
     const normalizedSelectedDate = selectedDate
       ? normalizeDate(selectedDate)
       : null;
@@ -75,11 +79,9 @@ async function loadRevenueData(selectedDate = null) {
     revenueSnapshot.forEach((childSnapshot) => {
       const order = childSnapshot.val();
 
-      // Chuẩn hóa ngày từ Firebase (thoiGian có dạng "HH:mm:ss DD/MM/YYYY")
       const normalizedOrderDate = normalizeDate(order.thoiGian, true);
       console.log("Ngày đơn hàng (chuẩn hóa):", normalizedOrderDate);
 
-      // Lọc theo ngày nếu có selectedDate
       if (
         !normalizedSelectedDate ||
         normalizedOrderDate === normalizedSelectedDate
@@ -113,7 +115,7 @@ async function loadRevenueData(selectedDate = null) {
     ).innerHTML = `<strong>${totalRevenue.toLocaleString()} VND</strong>`;
 
     if (tableBody.rows.length === 0 && normalizedSelectedDate) {
-      alert(`Không có đơn hàng nào vào ngày ${selectedDate}`);
+      showNotification(`Không có đơn hàng nào vào ngày ${selectedDate}`);
     }
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -122,10 +124,17 @@ async function loadRevenueData(selectedDate = null) {
 
 document.getElementById("clearButton").addEventListener("click", function () {
   document.getElementById("filterDate").value = "";
-  location.reload();
+  loadRevenueData();
 });
 
-// Hiển thị chi tiết đơn hàng trong bảng modal
+document
+  .getElementById("clearButtonMonth")
+  .addEventListener("click", function () {
+    document.getElementById("filterMonth").value = "";
+    document.getElementById("thongBaoDoanhThuThang").style.display = "none";
+    loadRevenueData();
+  });
+
 function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
   const modalBody = document.getElementById("modalBody");
   const mainContent = document.getElementById("mainContent");
@@ -153,9 +162,8 @@ function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
   mainContent.style.display = "none";
   document.getElementById("detailModal").style.display = "block";
 
-  // Xóa event listener cũ trước khi thêm mới để tránh trùng lặp
   const backButton = document.getElementById("backButton");
-  backButton.replaceWith(backButton.cloneNode(true)); // Loại bỏ tất cả event listener
+  backButton.replaceWith(backButton.cloneNode(true));
   document.getElementById("backButton").addEventListener("click", function () {
     mainContent.style.display = "block";
     document.getElementById("detailModal").style.display = "none";
@@ -166,8 +174,52 @@ document.addEventListener("DOMContentLoaded", () => loadRevenueData());
 document.getElementById("filterButton").addEventListener("click", () => {
   const selectedDate = document.getElementById("filterDate").value;
   if (!selectedDate) {
-    alert("Vui lòng chọn ngày!");
+    showNotification("Vui lòng chọn ngày!");
     return;
   }
   loadRevenueData(selectedDate);
 });
+
+document.getElementById("filterMonthButton").addEventListener("click", () => {
+  const selectedMonth = document.getElementById("filterMonth").value; // yyyy-mm
+  if (!selectedMonth) {
+    showNotification("Vui lòng chọn tháng!");
+    return;
+  }
+
+  calculateMonthlyRevenue(selectedMonth);
+});
+
+async function calculateMonthlyRevenue(monthStr) {
+  try {
+    const dbRef = ref(database);
+    const revenueSnapshot = await get(child(dbRef, "donHang"));
+
+    if (!revenueSnapshot.exists()) {
+      console.warn("Không có dữ liệu doanh thu.");
+      return;
+    }
+
+    let total = 0;
+    revenueSnapshot.forEach((childSnapshot) => {
+      const order = childSnapshot.val();
+      const time = order.thoiGian || "";
+
+      // Thời gian trong DB có định dạng: "HH:mm:ss DD/MM/YYYY"
+      const parts = time.split(" ");
+      if (parts.length === 2) {
+        const [day, month, year] = parts[1].split("/");
+        const orderMonthStr = `${year}-${month.padStart(2, "0")}`;
+        if (orderMonthStr === monthStr) {
+          total += order.tongTien || 0;
+        }
+      }
+    });
+
+    document.getElementById("tongDoanhThuThang").textContent =
+      total.toLocaleString() + " VND";
+    document.getElementById("thongBaoDoanhThuThang").style.display = "block";
+  } catch (error) {
+    console.error("Lỗi khi tính doanh thu theo tháng:", error);
+  }
+}

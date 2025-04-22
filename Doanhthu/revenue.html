@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="revenue.css" />
   </head>
   <body>
+    <div id="notification" class="notification" style="display: none"></div>
     <div id="mainContent" class="container">
       <nav>
         <ul class="menu">
@@ -52,6 +53,19 @@
           <i class="fa-regular fa-circle-xmark"></i> Xóa
         </button>
       </div>
+      <div class="filter-container">
+        <label for="filterMonth"><strong>Chọn tháng:</strong></label>
+        <input type="month" id="filterMonth" />
+        <button id="filterMonthButton" class="compact-btn">
+          <i class="fa-regular fa-eye"></i> Xem
+        </button>
+        <button id="clearButtonMonth" class="compact-btn">
+          <i class="fa-regular fa-circle-xmark"></i> Xóa
+        </button>
+      </div>
+      <label id="thongBaoDoanhThuThang" style="display: none">
+        Doanh thu tháng: <span id="tongDoanhThuThang">0 VND</span>
+      </label>
       <table id="sanPhamTable">
         <thead>
           <tr>

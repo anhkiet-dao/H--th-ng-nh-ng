@@ -156,19 +156,6 @@ button:hover,
   text-align: center;
 }
 
-.header-text {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 10px;
-  margin-bottom: 10px;
-  font-size: 20px;
-  font-weight: bold;
-  color: white;
-  font-family: Arial, sans-serif;
-  gap: 12px;
-}
-
 .title {
   display: flex;
   align-items: center;

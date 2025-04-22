@@ -16,6 +16,26 @@ body {
   margin-top: 20px;
 }
 
+.header-text {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 15px;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+  color: white;
+  font-family: Arial, sans-serif;
+  gap: 12px;
+}
+
+.header-text .logo {
+  height: 60px;
+  width: 60px;
+  object-fit: contain;
+  border-radius: 8px;
+}
+
 h2,
 h3 {
   color: #333;
@@ -33,7 +53,7 @@ h3 {
 }
 
 nav {
-  background-color: #29a4f1;
+  background-color: #65bef5;
   padding: 5px;
   border-radius: 5px;
   margin-bottom: 20px;

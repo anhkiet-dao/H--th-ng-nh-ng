@@ -22,6 +22,15 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const database = getDatabase(app);
 
+function showNotification(message) {
+  const notification = document.getElementById("notification");
+  notification.textContent = message;
+  notification.style.display = "block";
+
+  const newNotification = notification.cloneNode(true);
+  notification.parentNode.replaceChild(newNotification, notification);
+}
+
 document.addEventListener("DOMContentLoaded", function () {
   function loadProducts() {
     const dbRef = ref(database, "products");
@@ -76,6 +85,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function editRow(button) {
+    showNotification(`Đang chỉnh sửa sản phẩm...`);
     let row = button.closest("tr");
     row.querySelectorAll("td[contenteditable]").forEach((cell) => {
       cell.contentEditable = "true";
@@ -86,6 +96,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function saveRow(button) {
+    showNotification(`Đang lưu sản phẩm...`);
     let row = button.closest("tr");
 
     let productData = {
@@ -130,6 +141,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function deleteRow(button) {
+    showNotification(`Đang xóa sản phẩm...`);
     let row = button.closest("tr");
     let productId = row.cells[0].textContent;
 
@@ -147,6 +159,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 
   function addRow() {
+    showNotification(`Đang thêm sản phẩm mới...`);
     let table = document.getElementById("productTable");
     let newRow = document.createElement("tr");
 

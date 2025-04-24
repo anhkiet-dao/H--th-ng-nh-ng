@@ -136,6 +136,7 @@ document
   });
 
 function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
+  showNotification(`Đang xem chi tiết hóa đơn...`);
   const modalBody = document.getElementById("modalBody");
   const mainContent = document.getElementById("mainContent");
   const soHoaDonElement = document.getElementById("soHoaDon");
@@ -205,7 +206,6 @@ async function calculateMonthlyRevenue(monthStr) {
       const order = childSnapshot.val();
       const time = order.thoiGian || "";
 
-      // Thời gian trong DB có định dạng: "HH:mm:ss DD/MM/YYYY"
       const parts = time.split(" ");
       if (parts.length === 2) {
         const [day, month, year] = parts[1].split("/");

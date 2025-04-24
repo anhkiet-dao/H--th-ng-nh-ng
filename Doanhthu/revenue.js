@@ -37,8 +37,8 @@ function normalizeDate(dateStr, isFromFirebase = false) {
     const timeAndDate = dateStr.split(" ");
     if (timeAndDate.length < 2) return null;
 
-    const timePart = timeAndDate[0]; // HH:mm:ss
-    const datePart = timeAndDate[1]; // DD/MM/YYYY
+    const timePart = timeAndDate[0];
+    const datePart = timeAndDate[1];
 
     const [day, month, year] = datePart.split("/");
     return `${year}-${month.padStart(2, "0")}-${day.padStart(2, "0")}`;
@@ -52,7 +52,6 @@ function showNotification(message) {
   notification.textContent = message;
   notification.style.display = "block";
 
-  // Reset animation bằng cách tạo lại node
   const newNotification = notification.cloneNode(true);
   notification.parentNode.replaceChild(newNotification, notification);
 }
@@ -123,6 +122,7 @@ async function loadRevenueData(selectedDate = null) {
 }
 
 document.getElementById("clearButton").addEventListener("click", function () {
+  showNotification("Đang xóa lựa chọn...");
   document.getElementById("filterDate").value = "";
   loadRevenueData();
 });
@@ -130,6 +130,7 @@ document.getElementById("clearButton").addEventListener("click", function () {
 document
   .getElementById("clearButtonMonth")
   .addEventListener("click", function () {
+    showNotification("Đang xóa lựa chọn...");
     document.getElementById("filterMonth").value = "";
     document.getElementById("thongBaoDoanhThuThang").style.display = "none";
     loadRevenueData();
@@ -166,6 +167,7 @@ function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
   const backButton = document.getElementById("backButton");
   backButton.replaceWith(backButton.cloneNode(true));
   document.getElementById("backButton").addEventListener("click", function () {
+    showNotification("Đang quay lại...");
     mainContent.style.display = "block";
     document.getElementById("detailModal").style.display = "none";
   });

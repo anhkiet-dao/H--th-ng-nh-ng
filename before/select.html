@@ -5,33 +5,39 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Quản lý cửa hàng</title>
     <link rel="stylesheet" href="select.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
   </head>
   <body>
     <div class="container">
-      <button
-        class="btn btn-tinh-tien"
-        onclick="navigateTo('../tinhtien/index.html')"
-      >
-        Tính tiền
-      </button>
-      <button
-        class="btn btn-san-pham"
-        onclick="navigateTo('../product/product.html')"
-      >
-        Sản phẩm
-      </button>
-      <button
-        class="btn btn-doanh-thu"
-        onclick="navigateTo('../doanhthu/revenue.html')"
-      >
-        Doanh thu
-      </button>
-      <button
-        class="btn btn-khuyen-mai"
-        onclick="navigateTo('../khuyenmai/discount.html')"
-      >
-        Khuyến mãi
-      </button>
+      <div class="header-text">
+        <img
+          src="../image/Logo_UIT_updated.svg.png"
+          alt="UIT Logo"
+          class="logo"
+        />
+        <span>Trang chủ quản lý siêu thị UIT</span>
+      </div>
+      <div class="button-grid">
+        <button class="btn" onclick="navigateTo('../tinhtien/index.html')">
+          <i class="fas fa-cash-register"></i>
+          <span>Tính tiền</span>
+        </button>
+        <button class="btn" onclick="navigateTo('../product/product.html')">
+          <i class="fas fa-boxes"></i>
+          <span>Sản phẩm</span>
+        </button>
+        <button class="btn" onclick="navigateTo('../doanhthu/revenue.html')">
+          <i class="fas fa-chart-line"></i>
+          <span>Doanh thu</span>
+        </button>
+        <button class="btn" onclick="navigateTo('../khuyenmai/discount.html')">
+          <i class="fas fa-tags"></i>
+          <span>Khuyến mãi</span>
+        </button>
+      </div>
     </div>
     <script src="select.js"></script>
   </body>

@@ -56,37 +56,51 @@ function showNotification(message) {
   notification.parentNode.replaceChild(newNotification, notification);
 }
 
-async function loadRevenueData(selectedDate = null) {
+document.addEventListener("DOMContentLoaded", () => {
+  document.getElementById("sanPhamTable").style.display = "none";
+  document.getElementById("tongThanhToan").style.display = "none";
+});
+
+async function loadRevenueData(selectedDate = null, selectedMonth = null) {
   try {
     const dbRef = ref(database);
     const revenueSnapshot = await get(child(dbRef, "donHang"));
 
-    if (!revenueSnapshot.exists()) {
-      console.warn("Không có dữ liệu doanh thu.");
-      return;
-    }
-
     const tableBody = document.querySelector("#sanPhamTable tbody");
+    const invoiceInfo = document.getElementById("invoiceInfo");
     tableBody.innerHTML = "";
+    invoiceInfo.innerHTML = "";
     let totalRevenue = 0;
+    let hasData = false;
 
     const normalizedSelectedDate = selectedDate
       ? normalizeDate(selectedDate)
       : null;
-    console.log("Ngày đã chọn (chuẩn hóa):", normalizedSelectedDate);
 
     revenueSnapshot.forEach((childSnapshot) => {
       const order = childSnapshot.val();
-
+      const time = order.thoiGian || "";
       const normalizedOrderDate = normalizeDate(order.thoiGian, true);
-      console.log("Ngày đơn hàng (chuẩn hóa):", normalizedOrderDate);
 
-      if (
+      const matchesDate =
         !normalizedSelectedDate ||
-        normalizedOrderDate === normalizedSelectedDate
-      ) {
-        const row = tableBody.insertRow();
+        normalizedOrderDate === normalizedSelectedDate;
 
+      const matchesMonth =
+        !selectedMonth ||
+        (() => {
+          const parts = time.split(" ");
+          if (parts.length === 2) {
+            const [day, month, year] = parts[1].split("/");
+            const orderMonthStr = `${year}-${month.padStart(2, "0")}`;
+            return orderMonthStr === selectedMonth;
+          }
+          return false;
+        })();
+
+      if (matchesDate && matchesMonth) {
+        hasData = true;
+        const row = tableBody.insertRow();
         row.insertCell(0).textContent = order.thoiGian;
         row.insertCell(1).textContent = order.soHoaDon;
         row.insertCell(
@@ -96,7 +110,6 @@ async function loadRevenueData(selectedDate = null) {
         const detailButton = document.createElement("button");
         detailButton.innerHTML = '<i class="fas fa-info-circle"></i>';
         detailButton.classList.add("detail-btn");
-
         detailButton.onclick = () =>
           viewDetails(
             order.danhSachSanPham,
@@ -110,12 +123,20 @@ async function loadRevenueData(selectedDate = null) {
       }
     });
 
-    document.getElementById(
-      "tongThanhToan"
-    ).innerHTML = `<strong>${totalRevenue.toLocaleString()} VND</strong>`;
-
-    if (tableBody.rows.length === 0 && normalizedSelectedDate) {
-      showNotification(`Không có đơn hàng nào vào ngày ${selectedDate}`);
+    if (hasData) {
+      document.getElementById("sanPhamTable").style.display = "table";
+      document.getElementById("tongThanhToan").style.display = "block";
+      document.getElementById(
+        "tongThanhToan"
+      ).innerHTML = `Tổng tiền: ${totalRevenue.toLocaleString()} VND`;
+    } else {
+      document.getElementById("sanPhamTable").style.display = "none";
+      document.getElementById("tongThanhToan").style.display = "none";
+      if (selectedDate) {
+        invoiceInfo.innerHTML = `<p style='color: red; font-weight: bold;'>Không có hóa đơn ngày ${selectedDate}.</p>`;
+      } else if (selectedMonth) {
+        invoiceInfo.innerHTML = `<p style='color: red; font-weight: bold;'>Không có hóa đơn trong tháng ${selectedMonth}.</p>`;
+      }
     }
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -123,18 +144,31 @@ async function loadRevenueData(selectedDate = null) {
 }
 
 document.getElementById("clearButton").addEventListener("click", function () {
+  const filterDate = document.getElementById("filterDate").value;
+  if (!filterDate) {
+    showNotification("Bạn chưa chọn ngày nào để lọc!");
+    return;
+  }
   showNotification("Đang xóa lựa chọn...");
   document.getElementById("filterDate").value = "";
-  loadRevenueData();
+  document.getElementById("sanPhamTable").style.display = "none";
+  document.getElementById("tongThanhToan").style.display = "none";
+  document.getElementById("invoiceInfo").innerHTML = "";
 });
 
 document
   .getElementById("clearButtonMonth")
   .addEventListener("click", function () {
+    const filterDate = document.getElementById("filterMonth").value;
+    if (!filterDate) {
+      showNotification("Bạn chưa chọn tháng nào để lọc!");
+      return;
+    }
     showNotification("Đang xóa lựa chọn...");
     document.getElementById("filterMonth").value = "";
-    document.getElementById("thongBaoDoanhThuThang").style.display = "none";
-    loadRevenueData();
+    document.getElementById("sanPhamTable").style.display = "none";
+    document.getElementById("tongThanhToan").style.display = "none";
+    document.getElementById("invoiceInfo").innerHTML = "";
   });
 
 function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
@@ -174,7 +208,6 @@ function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
   });
 }
 
-document.addEventListener("DOMContentLoaded", () => loadRevenueData());
 document.getElementById("filterButton").addEventListener("click", () => {
   const selectedDate = document.getElementById("filterDate").value;
   if (!selectedDate) {
@@ -185,13 +218,14 @@ document.getElementById("filterButton").addEventListener("click", () => {
 });
 
 document.getElementById("filterMonthButton").addEventListener("click", () => {
-  const selectedMonth = document.getElementById("filterMonth").value; // yyyy-mm
+  const selectedMonth = document.getElementById("filterMonth").value;
   if (!selectedMonth) {
     showNotification("Vui lòng chọn tháng!");
     return;
   }
-
-  calculateMonthlyRevenue(selectedMonth);
+  calculateMonthlyRevenue(selectedMonth).then(() => {
+    loadRevenueData(null, selectedMonth);
+  });
 });
 
 async function calculateMonthlyRevenue(monthStr) {
@@ -219,9 +253,7 @@ async function calculateMonthlyRevenue(monthStr) {
       }
     });
 
-    document.getElementById("tongDoanhThuThang").textContent =
-      total.toLocaleString() + " VND";
-    document.getElementById("thongBaoDoanhThuThang").style.display = "block";
+    loadRevenueData(null, monthStr);
   } catch (error) {
     console.error("Lỗi khi tính doanh thu theo tháng:", error);
   }

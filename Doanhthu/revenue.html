@@ -51,30 +51,28 @@
           </li>
         </ul>
       </nav>
-      <h2>Lịch sử</h2>
+      <h2>Doanh thu</h2>
       <div class="filter-container">
         <label for="filterDate"><strong>Chọn ngày:</strong></label>
         <input type="date" id="filterDate" placeholder="mm/dd/yyyy" />
         <button id="filterButton" class="compact-btn">
-          <i class="fa-regular fa-eye"></i> Xem
+          <i class="fa-solid fa-magnifying-glass"></i> Search
         </button>
         <button id="clearButton" class="compact-btn">
-          <i class="fa-regular fa-circle-xmark"></i> Xóa
+          <i class="fa-solid fa-trash"></i> Xóa
         </button>
       </div>
       <div class="filter-container">
         <label for="filterMonth"><strong>Chọn tháng:</strong></label>
         <input type="month" id="filterMonth" />
         <button id="filterMonthButton" class="compact-btn">
-          <i class="fa-regular fa-eye"></i> Xem
+          <i class="fa-solid fa-magnifying-glass"></i> Search
         </button>
         <button id="clearButtonMonth" class="compact-btn">
-          <i class="fa-regular fa-circle-xmark"></i> Xóa
+          <i class="fa-solid fa-trash"></i> Xóa
         </button>
       </div>
-      <label id="thongBaoDoanhThuThang" style="display: none">
-        Doanh thu tháng: <span id="tongDoanhThuThang">0 VND</span>
-      </label>
+      <div id="invoiceInfo"></div>
       <table id="sanPhamTable">
         <thead>
           <tr>
@@ -86,7 +84,7 @@
         </thead>
         <tbody></tbody>
       </table>
-      <h3>Tổng tiền: <span id="tongThanhToan">0 VND</span></h3>
+      <h3><span id="tongThanhToan">0 VND</span></h3>
     </div>
     <div id="detailModal" style="display: none">
       <h2>Chi tiết đơn hàng</h2>

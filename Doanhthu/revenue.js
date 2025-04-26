@@ -88,8 +88,9 @@ async function loadRevenueData(selectedDate = null) {
         const row = tableBody.insertRow();
 
         row.insertCell(0).textContent = order.thoiGian;
+        row.insertCell(1).textContent = order.soHoaDon;
         row.insertCell(
-          1
+          2
         ).textContent = `${order.tongTien.toLocaleString()} VND`;
 
         const detailButton = document.createElement("button");
@@ -103,7 +104,7 @@ async function loadRevenueData(selectedDate = null) {
             order.thoiGian,
             order.tongTien
           );
-        row.insertCell(2).appendChild(detailButton);
+        row.insertCell(3).appendChild(detailButton);
 
         totalRevenue += order.tongTien;
       }

@@ -64,9 +64,9 @@ nav {
   list-style-type: none;
   padding: 0;
   margin: 0;
-  display: flex; /* Sử dụng flexbox */
-  justify-content: space-between; /* Căn menu về bên trái */
-  align-items: center; /* Căn giữa theo chiều dọc */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .menu li {

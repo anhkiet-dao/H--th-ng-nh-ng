@@ -130,7 +130,7 @@ document.querySelectorAll(".calculate-input").forEach((input) => {
 
 function tinhTien() {
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
-  const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
+  const soLuong = parseFloat(document.getElementById("soLuong").value) || 0;
   const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
   if (!giaSP || !soLuong) return;
 
@@ -160,7 +160,7 @@ async function thanhToan() {
     maSP: row.cells[0].textContent,
     tenSP: row.cells[1].textContent,
     giaSP: parseFloat(row.cells[2].textContent.replace(/\D/g, "")),
-    soLuong: parseInt(row.cells[3].textContent),
+    soLuong: parseFloat(row.cells[3].textContent),
     giamGia: parseFloat(row.cells[5].textContent.replace(/\D/g, "")),
     tongGia: parseFloat(row.cells[4].textContent.replace(/\D/g, "")),
     thanhToan: parseFloat(row.cells[6].textContent.replace(/\D/g, "")),

@@ -78,9 +78,9 @@ function themSanPhamVaoBang(maSP, tenSP, giaSP, soLuong, giamGia) {
     <td>${maSP}</td>
     <td>${tenSP}</td>
     <td>${giaSP.toLocaleString()}</td>
-    <td>${soLuong}</td>
+    <td>${soLuong} kg</td>
     <td>${tongGia.toLocaleString()}</td>
-    <td>${giamGia}</td>
+    <td>${giamGia}%</td>
     <td>${thanhToan.toLocaleString()}</td>`;
 
   updateTotal();
@@ -206,8 +206,9 @@ function hienThiHoaDon(donHang) {
       <td>${sp.maSP}</td>
       <td>${sp.tenSP}</td>
       <td>${sp.giaSP.toLocaleString()}</td>
-      <td>${sp.soLuong}</td>
-      <td>${sp.giamGia}</td>
+      <td>${sp.soLuong} kg</td>
+      <td>${sp.tongGia.toLocaleString()}</td>
+      <td>${sp.giamGia}%</td>
       <td>${sp.thanhToan.toLocaleString()}</td>
     `;
     tbody.appendChild(row);
@@ -220,6 +221,7 @@ function hienThiHoaDon(donHang) {
   hoaDonDiv.style.display = "block";
 
   document.getElementById("printButton").addEventListener("click", function () {
+    showNotification("Đang in hóa đơn...");
     hoaDonDiv.style.display = "none";
     mainContent.style.display = "block";
   });

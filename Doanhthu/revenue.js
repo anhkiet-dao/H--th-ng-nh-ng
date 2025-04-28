@@ -186,7 +186,7 @@ function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
         <td>${item.maSP}</td>
         <td>${item.tenSP}</td>
         <td>${item.giaSP.toLocaleString()}</td>
-        <td>${item.soLuong}</td>
+        <td>${item.soLuong} kg</td>
         <td>${(item.giaSP * item.soLuong).toLocaleString()}</td>
         <td>${item.giamGia}%</td>
         <td>${item.thanhToan.toLocaleString()}</td>

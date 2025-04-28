@@ -129,9 +129,10 @@ table {
 
 th,
 td {
-  padding: 10px;
+  padding: 7px;
   text-align: center;
   border: 1px solid #ddd;
+  white-space: nowrap;
 }
 
 th {
@@ -162,10 +163,12 @@ button:hover,
 #hoaDon {
   display: none;
   margin-top: 20px;
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 10px;
-  background: #f9f9f9;
+  padding: 20px 25px;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  color: #333;
 }
 
 #printButton {
@@ -185,7 +188,7 @@ button:hover,
   font-size: 16px;
   display: flex;
   align-items: center;
-  transition: background-color 0.3s ease; /* Hiệu ứng chuyển màu */
+  transition: background-color 0.3s ease;
 }
 
 .logout-btn a i {
@@ -197,7 +200,7 @@ button:hover,
 }
 
 #notification {
-  position: fixed; /* hoặc absolute nếu cần */
+  position: fixed;
   top: 20px;
   left: 40%;
   z-index: 1000;

@@ -10,7 +10,6 @@ import {
   onChildAdded,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
-// Cấu hình Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCOsWpn50GmILkdfGoHluQ8SFIN3tIUDtE",
   authDomain: "nt131p22.firebaseapp.com",
@@ -167,7 +166,6 @@ async function thanhToan() {
   }));
 
   try {
-    // Lưu đơn hàng mới vào Firebase
     await set(push(ref(database, "donHang")), {
       soHoaDon: soHoaDon,
       thoiGian: layGioVietNam(),
@@ -175,12 +173,10 @@ async function thanhToan() {
       tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
     });
 
-    // Xóa tất cả đơn hàng trong "order"
     await remove(ref(database, "order"));
 
     hienThiHoaDon(donHang);
 
-    // Xóa dữ liệu trên giao diện
     document.querySelector("#sanPhamTable tbody").innerHTML = "";
     updateTotal();
   } catch (error) {

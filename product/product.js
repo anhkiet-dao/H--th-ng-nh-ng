@@ -107,12 +107,10 @@ document.addEventListener("DOMContentLoaded", function () {
       quantity: row.cells[4].textContent.trim(),
     };
 
-    // Lưu vào bảng products
     set(ref(database, `products/${productData.id}`), productData)
       .then(() => {
         console.log("Sản phẩm đã được lưu vào products!");
 
-        // Tạo dữ liệu khuyến mãi mặc định
         let discountData = {
           id: productData.id,
           name: productData.name,
@@ -121,13 +119,11 @@ document.addEventListener("DOMContentLoaded", function () {
           end: "",
         };
 
-        // Lưu vào bảng discounts
         return set(ref(database, `discounts/${productData.id}`), discountData);
       })
       .then(() => {
         console.log("Sản phẩm đã được đồng bộ vào discounts!");
 
-        // Khóa chỉnh sửa sau khi lưu
         row.querySelectorAll("td[contenteditable]").forEach((cell) => {
           cell.contentEditable = "false";
         });
@@ -145,7 +141,6 @@ document.addEventListener("DOMContentLoaded", function () {
     let row = button.closest("tr");
     let productId = row.cells[0].textContent;
 
-    // Xóa sản phẩm khỏi products
     remove(ref(database, `products/${productId}`))
       .then(() => {
         return remove(ref(database, `discounts/${productId}`));

@@ -8,7 +8,6 @@ import {
   set,
 } from "https://www.gstatic.com/firebasejs/11.5.0/firebase-database.js";
 
-// Cấu hình Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyCOsWpn50GmILkdfGoHluQ8SFIN3tIUDtE",
   authDomain: "nt131p22.firebaseapp.com",

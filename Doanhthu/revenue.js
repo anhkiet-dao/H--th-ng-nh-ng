@@ -60,7 +60,11 @@ document.addEventListener("DOMContentLoaded", () => {
   document.getElementById("tongThanhToan").style.display = "none";
 });
 
-async function loadRevenueData(selectedDate = null, selectedMonth = null) {
+async function loadRevenueData(
+  selectedDate = null,
+  selectedMonth = null,
+  selectedBranch = null
+) {
   try {
     const dbRef = ref(database);
     const revenueSnapshot = await get(child(dbRef, "donHang"));
@@ -97,7 +101,10 @@ async function loadRevenueData(selectedDate = null, selectedMonth = null) {
           return false;
         })();
 
-      if (matchesDate && matchesMonth) {
+      const matchesBranch =
+        !selectedBranch || order.chiNhanh === selectedBranch;
+
+      if (matchesDate && matchesMonth && matchesBranch) {
         hasData = true;
         const row = tableBody.insertRow();
         row.insertCell(0).textContent = order.thoiGian;
@@ -114,7 +121,8 @@ async function loadRevenueData(selectedDate = null, selectedMonth = null) {
             order.danhSachSanPham,
             order.soHoaDon,
             order.thoiGian,
-            order.tongTien
+            order.tongTien,
+            order.chiNhanh
           );
         row.insertCell(3).appendChild(detailButton);
 
@@ -141,6 +149,19 @@ async function loadRevenueData(selectedDate = null, selectedMonth = null) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
   }
 }
+
+document.getElementById("clearbranch").addEventListener("click", function () {
+  const filterBranch = document.getElementById("branchSelect").value;
+  if (!filterBranch) {
+    showNotification("Bạn chưa chọn chi nhánh nào để lọc!");
+    return;
+  }
+  showNotification("Đang xóa lựa chọn...");
+  document.getElementById("branchSelect").value = "Chọn chi nhánh";
+  document.getElementById("sanPhamTable").style.display = "none";
+  document.getElementById("tongThanhToan").style.display = "none";
+  document.getElementById("invoiceInfo").innerHTML = "";
+});
 
 document.getElementById("clearButton").addEventListener("click", function () {
   const filterDate = document.getElementById("filterDate").value;
@@ -170,16 +191,20 @@ document
     document.getElementById("invoiceInfo").innerHTML = "";
   });
 
-function viewDetails(orderItems, soHoaDon, thoiGian, tongTien) {
+function viewDetails(orderItems, soHoaDon, thoiGian, tongTien, chiNhanh) {
   showNotification(`Đang xem chi tiết hóa đơn...`);
   const modalBody = document.getElementById("modalBody");
   const mainContent = document.getElementById("mainContent");
   const soHoaDonElement = document.getElementById("soHoaDon");
   const thoiGianElement = document.getElementById("thoiGian");
   const TongtienElement = document.getElementById("Tongtien");
+  const chiNhanhElement = document.getElementById("chiNhanh");
+
   modalBody.innerHTML = "";
+  chiNhanhElement.textContent = `Chi nhánh: ${chiNhanh}`;
   soHoaDonElement.textContent = `Số hóa đơn: ${soHoaDon}`;
   thoiGianElement.textContent = `Thời gian: ${thoiGian}`;
+
   orderItems.forEach((item, index) => {
     const row = `<tr>
         <td>${item.maSP}</td>
@@ -214,6 +239,16 @@ document.getElementById("filterButton").addEventListener("click", () => {
     return;
   }
   loadRevenueData(selectedDate);
+});
+
+document.getElementById("filterbranchButton").addEventListener("click", () => {
+  const selectedBranch = document.getElementById("branchSelect").value;
+  if (!selectedBranch || selectedBranch === "Tất cả") {
+    showNotification("Vui lòng chọn chi nhánh!");
+    return;
+  }
+  showNotification(`Đang lọc chi nhánh: ${selectedBranch}...`);
+  loadRevenueData(null, null, selectedBranch);
 });
 
 document.getElementById("filterMonthButton").addEventListener("click", () => {

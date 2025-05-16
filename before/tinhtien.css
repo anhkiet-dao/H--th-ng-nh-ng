@@ -140,12 +140,79 @@ button:hover,
 }
 
 #hoaDon {
-  display: none;
+  font-family: "Arial", sans-serif;
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  position: relative;
+}
+
+#hoaDon h2 {
+  color: #2c3e50;
+  text-align: center;
+  margin-bottom: 5px;
+  font-size: 24px;
+}
+
+#hoaDon h3 {
+  color: #7f8c8d;
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 20px;
+  font-size: 16px;
+  font-weight: normal;
+}
+
+#hoaDon p {
+  margin: 8px 0;
+  font-size: 14px;
+}
+
+#hoaDon table {
+  width: 100%;
+  margin: 15px 0;
+  border-collapse: collapse;
+}
+
+#hoaDon th {
+  background-color: #3498db;
+  color: white;
+  padding: 10px;
+  text-align: left;
+  font-size: 14px;
+}
+
+#hoaDon td {
+  padding: 8px 10px;
+  border-bottom: 1px solid #e0e0e0;
+  font-size: 14px;
+}
+
+#hoaDon tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+#hoaDon tr:hover {
+  background-color: #f1f1f1;
+}
+
+#hoaDon p[style*="text-align: right"] {
+  font-size: 16px;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+#hoaDon p[style*="text-align: center"] {
+  color: #7f8c8d;
+  font-style: italic;
   margin-top: 20px;
-  border: 1px solid #ccc;
-  padding: 15px;
-  border-radius: 10px;
-  background: #f9f9f9;
+}
+
+#hoaDonTongTien {
+  font-family: "Arial", sans-serif;
 }
 
 #printButton {
@@ -217,4 +284,22 @@ button:hover,
     opacity: 0;
     display: none;
   }
+}
+
+.branch-info {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.username-display {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 5px 0;
+  color: white;
+}
+
+.username-display i {
+  margin-right: 8px;
+  color: #fff;
 }

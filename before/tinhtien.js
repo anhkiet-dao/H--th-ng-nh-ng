@@ -129,7 +129,7 @@ document.querySelectorAll(".calculate-input").forEach((input) => {
 
 function tinhTien() {
   const giaSP = parseFloat(document.getElementById("giaSP").value) || 0;
-  const soLuong = parseInt(document.getElementById("soLuong").value) || 0;
+  const soLuong = parseFloat(document.getElementById("soLuong").value) || 0;
   const giamGia = parseFloat(document.getElementById("giamGia").value) || 0;
   if (!giaSP || !soLuong) return;
 
@@ -143,6 +143,33 @@ function tinhTien() {
     "thanhToan"
   ).textContent = `${thanhToan.toLocaleString()} VND`;
 }
+
+document.addEventListener("DOMContentLoaded", () => {
+  const username = localStorage.getItem("loggedInUser");
+  const display = document.getElementById("usernameDisplay");
+  const displayAdd = document.getElementById("userDisplay");
+
+  if (username === "ChinhanhA") {
+    display.textContent = "Chi nhánh A";
+    displayAdd.textContent =
+      "Tòa A ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
+  } else if (username === "ChinhanhB") {
+    display.textContent = "Chi nhánh B";
+    displayAdd.textContent =
+      "Tòa B ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
+  }
+
+  if (username === "ChinhanhA") {
+    document.getElementById("branchName").textContent =
+      "Chi nhánh A - Tòa A ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
+  } else if (username === "ChinhanhB") {
+    document.getElementById("branchName").textContent =
+      "Chi nhánh B - Tòa B ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
+  }
+
+  theoDoiDonHangMoi();
+  document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
+});
 
 async function thanhToan() {
   const rows = [...document.querySelectorAll("#sanPhamTable tbody tr")];
@@ -159,16 +186,22 @@ async function thanhToan() {
     maSP: row.cells[0].textContent,
     tenSP: row.cells[1].textContent,
     giaSP: parseFloat(row.cells[2].textContent.replace(/\D/g, "")),
-    soLuong: parseInt(row.cells[3].textContent),
+    soLuong: parseFloat(row.cells[3].textContent),
     giamGia: parseFloat(row.cells[5].textContent.replace(/\D/g, "")),
     tongGia: parseFloat(row.cells[4].textContent.replace(/\D/g, "")),
     thanhToan: parseFloat(row.cells[6].textContent.replace(/\D/g, "")),
   }));
 
+  const chiNhanh =
+    localStorage.getItem("loggedInUser") === "ChinhanhA"
+      ? "Chi nhánh A"
+      : "Chi nhánh B";
+
   try {
     await set(push(ref(database, "donHang")), {
       soHoaDon: soHoaDon,
       thoiGian: layGioVietNam(),
+      chiNhanh: chiNhanh,
       danhSachSanPham: donHang,
       tongTien: donHang.reduce((sum, sp) => sum + sp.thanhToan, 0),
     });
@@ -183,11 +216,6 @@ async function thanhToan() {
     console.error("Lỗi khi thanh toán:", error);
   }
 }
-
-document.addEventListener("DOMContentLoaded", () => {
-  theoDoiDonHangMoi();
-  document.getElementById("btnThanhToan").addEventListener("click", thanhToan);
-});
 
 function hienThiHoaDon(donHang) {
   const hoaDonDiv = document.getElementById("hoaDon");
@@ -221,5 +249,12 @@ function hienThiHoaDon(donHang) {
   document.getElementById("printButton").addEventListener("click", function () {
     hoaDonDiv.style.display = "none";
     mainContent.style.display = "block";
+    location.reload();
+  });
+
+  document.getElementById("logout").addEventListener("click", function (e) {
+    e.preventDefault();
+    localStorage.removeItem("loggedInUser");
+    window.location.href = "Login.html";
   });
 }

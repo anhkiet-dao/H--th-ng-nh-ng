@@ -168,7 +168,9 @@ button:hover,
 
 #soHoaDon,
 #thoiGian,
-#Tongtien {
+#Tongtien,
+#chiNhanh,
+#diaChi {
   font-weight: bold;
   margin-bottom: 20px;
   color: #333;
@@ -180,6 +182,16 @@ button:hover,
 }
 
 #thoiGian {
+  font-size: 16px;
+  color: #333;
+}
+
+#chiNhanh {
+  font-size: 16px;
+  color: #333;
+}
+
+#diaChi {
   font-size: 16px;
   color: #333;
 }
@@ -212,7 +224,7 @@ button:hover,
 .filter-container {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
   margin-bottom: 10px;
 }
 
@@ -226,7 +238,8 @@ button:hover,
 }
 
 .filter-container #filterDate,
-.filter-container #filterMonth {
+.filter-container #filterMonth,
+.filter-container #branchSelect {
   padding: 5px 6px;
   border: 1px solid #ddd;
   border-radius: 4px;
@@ -247,13 +260,15 @@ button:hover,
 }
 
 .filter-container #clearButton,
-.filter-container #clearButtonMonth {
+.filter-container #clearButtonMonth,
+.filter-container #clearbranch {
   background-color: #e74c3c;
   color: white;
 }
 
 .filter-container #clearButton:hover,
-.filter-container #clearButtonMonth:hover {
+.filter-container #clearButtonMonth:hover,
+.filter-container #clearbranch:hover {
   background-color: #c0392b;
   color: white;
 }
@@ -293,4 +308,39 @@ button:hover,
     opacity: 0;
     display: none;
   }
+}
+#branchSelect {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: white;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+  background-size: 16px;
+}
+
+#branchSelect:hover {
+  border-color: #999;
+}
+
+#branchSelect:focus {
+  outline: none;
+  border-color: #4a90e2;
+  box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.2);
+}
+
+#branchSelect option {
+  padding: 8px;
+}
+
+#branchSelect option:checked {
+  background-color: #f0f7ff;
+  font-weight: bold;
 }

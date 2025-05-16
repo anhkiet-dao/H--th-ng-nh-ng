@@ -5,7 +5,11 @@ function login() {
 
   if (username === "admin" && password === "1234") {
     window.location.href = "select.html";
-  } else if (username === "user" && password === "1234") {
+  } else if (
+    (username === "ChinhanhA" && password === "1234") ||
+    (username === "ChinhanhB" && password === "1234")
+  ) {
+    localStorage.setItem("loggedInUser", username);
     window.location.href = "tinhtien.html";
   } else {
     errorMessage.textContent = "Tên đăng nhập hoặc mật khẩu sai!";

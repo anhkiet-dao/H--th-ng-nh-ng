@@ -53,6 +53,20 @@
       </nav>
       <h2>Doanh thu</h2>
       <div class="filter-container">
+        <label for="branchSelect"><strong>Chi nhánh:</strong></label>
+        <select id="branchSelect">
+          <option value="">Chọn chi nhánh</option>
+          <option value="Chi nhánh A">Chi nhánh A</option>
+          <option value="Chi nhánh B">Chi nhánh B</option>
+        </select>
+        <button id="filterbranchButton" class="compact-btn">
+          <i class="fa-solid fa-magnifying-glass"></i> Search
+        </button>
+        <button id="clearbranch" class="compact-btn">
+          <i class="fa-solid fa-trash"></i> Xóa
+        </button>
+      </div>
+      <div class="filter-container">
         <label for="filterDate"><strong>Chọn ngày:</strong></label>
         <input type="date" id="filterDate" placeholder="mm/dd/yyyy" />
         <button id="filterButton" class="compact-btn">
@@ -89,6 +103,8 @@
     <div id="detailModal" style="display: none">
       <h2>Chi tiết đơn hàng</h2>
       <div id="soHoaDon"></div>
+      <div id="chiNhanh"></div>
+      <div id="diaChi"></div>
       <div id="thoiGian"></div>
       <table border="1">
         <thead>

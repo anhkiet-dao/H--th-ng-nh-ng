@@ -25,6 +25,10 @@
             <a href="./Login.html"><i class="fas fa-sign-out-alt"></i></a>
           </li>
         </ul>
+        <ul class="branch-info">
+          <li class="username-display" id="usernameDisplay"></li>
+          <li class="username-display" id="userDisplay"></li>
+        </ul>
       </nav>
       <h2 style="display: none">Tính tiền sản phẩm</h2>
       <div class="form-group" style="display: none">
@@ -74,7 +78,7 @@
     </div>
     <div id="hoaDon" style="display: none">
       <h2>Siêu thị UIT</h2>
-      <h3><em>Khu phố 6, Phường Linh Trung, TP.Thủ Đức, TP.HCM</em></h3>
+      <h3 id="branchName"></h3>
       <h2>Hóa đơn</h2>
       <p><strong>Số HĐ:</strong> <span id="soHoaDon"></span></p>
       <p><strong>Thời gian lập:</strong> <span id="hoaDonThoiGian"></span></p>
@@ -92,7 +96,7 @@
         <tbody id="hoaDonNoiDung"></tbody>
       </table>
       <p style="text-align: right; margin-top: 10px">
-        <strong>Tổng thanh toán: </strong><span id="hoaDonTongTien"></span> VND
+        Tổng thanh toán: <span id="hoaDonTongTien"></span> VND
       </p>
       <p style="text-align: center">
         <strong><em>Cảm ơn quý khách, hẹn gặp lại</em></strong>

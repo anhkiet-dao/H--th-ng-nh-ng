@@ -344,3 +344,8 @@ button:hover,
   background-color: #f0f7ff;
   font-weight: bold;
 }
+
+#combinedFilterButton {
+  width: 100px;
+  height: 30px;
+}

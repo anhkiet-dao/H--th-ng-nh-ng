@@ -104,7 +104,17 @@ async function loadRevenueData(
       const matchesBranch =
         !selectedBranch || order.chiNhanh === selectedBranch;
 
-      if (matchesDate && matchesMonth && matchesBranch) {
+      if (matchesDate && matchesBranch && !selectedMonth) {
+        addRow(order);
+      } else if (matchesMonth && matchesBranch && !selectedDate) {
+        addRow(order);
+      } else if (!selectedDate && !selectedMonth && matchesBranch) {
+        addRow(order);
+      } else if (!selectedDate && !selectedMonth && !selectedBranch) {
+        addRow(order);
+      }
+
+      function addRow(order) {
         hasData = true;
         const row = tableBody.insertRow();
         row.insertCell(0).textContent = order.thoiGian;
@@ -139,11 +149,7 @@ async function loadRevenueData(
     } else {
       document.getElementById("sanPhamTable").style.display = "none";
       document.getElementById("tongThanhToan").style.display = "none";
-      if (selectedDate) {
-        invoiceInfo.innerHTML = `<p style='color: red; font-weight: bold;'>Không có hóa đơn ngày ${selectedDate}.</p>`;
-      } else if (selectedMonth) {
-        invoiceInfo.innerHTML = `<p style='color: red; font-weight: bold;'>Không có hóa đơn trong tháng ${selectedMonth}.</p>`;
-      }
+      invoiceInfo.innerHTML = `<p style='color: red; font-weight: bold;'>Không có hóa đơn nào.</p>`;
     }
   } catch (error) {
     console.error("Lỗi khi lấy dữ liệu doanh thu:", error);
@@ -157,7 +163,7 @@ document.getElementById("clearbranch").addEventListener("click", function () {
     return;
   }
   showNotification("Đang xóa lựa chọn...");
-  document.getElementById("branchSelect").value = "Chọn chi nhánh";
+  document.getElementById("branchSelect").value = "";
   document.getElementById("sanPhamTable").style.display = "none";
   document.getElementById("tongThanhToan").style.display = "none";
   document.getElementById("invoiceInfo").innerHTML = "";
@@ -234,6 +240,8 @@ function viewDetails(orderItems, soHoaDon, thoiGian, tongTien, chiNhanh) {
 
 document.getElementById("filterButton").addEventListener("click", () => {
   const selectedDate = document.getElementById("filterDate").value;
+  document.getElementById("filterMonth").value = "";
+  document.getElementById("branchSelect").value = "";
   if (!selectedDate) {
     showNotification("Vui lòng chọn ngày!");
     return;
@@ -243,7 +251,9 @@ document.getElementById("filterButton").addEventListener("click", () => {
 
 document.getElementById("filterbranchButton").addEventListener("click", () => {
   const selectedBranch = document.getElementById("branchSelect").value;
-  if (!selectedBranch || selectedBranch === "Tất cả") {
+  document.getElementById("filterDate").value = "";
+  document.getElementById("filterMonth").value = "";
+  if (!selectedBranch) {
     showNotification("Vui lòng chọn chi nhánh!");
     return;
   }
@@ -253,6 +263,8 @@ document.getElementById("filterbranchButton").addEventListener("click", () => {
 
 document.getElementById("filterMonthButton").addEventListener("click", () => {
   const selectedMonth = document.getElementById("filterMonth").value;
+  document.getElementById("filterDate").value = "";
+  document.getElementById("branchSelect").value = "";
   if (!selectedMonth) {
     showNotification("Vui lòng chọn tháng!");
     return;
@@ -292,3 +304,25 @@ async function calculateMonthlyRevenue(monthStr) {
     console.error("Lỗi khi tính doanh thu theo tháng:", error);
   }
 }
+
+document
+  .getElementById("combinedFilterButton")
+  .addEventListener("click", () => {
+    const selectedDate = document.getElementById("filterDate").value;
+    const selectedMonth = document.getElementById("filterMonth").value;
+    const selectedBranch = document.getElementById("branchSelect").value;
+
+    if (selectedDate && selectedMonth) {
+      showNotification(
+        "Vui lòng chỉ chọn **ngày hoặc tháng**, không chọn cả hai."
+      );
+      return;
+    }
+
+    if (!selectedDate && !selectedMonth && !selectedBranch) {
+      showNotification("Vui lòng chọn chi nhánh, ngày hoặc tháng để lọc.");
+      return;
+    }
+    showNotification("Đang lọc dữ liệu...");
+    loadRevenueData(selectedDate, selectedMonth, selectedBranch);
+  });

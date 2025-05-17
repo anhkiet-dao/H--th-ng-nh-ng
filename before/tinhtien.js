@@ -41,10 +41,18 @@ function showNotification(message) {
 }
 
 function theoDoiDonHangMoi() {
-  const orderRef = ref(database, "order");
+  const currentBranch =
+    localStorage.getItem("loggedInUser") === "ChinhanhA"
+      ? "Chi nhánh A"
+      : "Chi nhánh B";
+
+  const orderRef = ref(database, "order/" + currentBranch);
 
   onChildAdded(orderRef, (snapshot) => {
-    const { masp, soluong } = snapshot.val();
+    const data = snapshot.val();
+    const { masp, soluong } = data;
+
+    console.log("Đơn hàng mới:", data);
     layThongTinSanPham(masp, soluong);
   });
 }
@@ -252,9 +260,12 @@ function hienThiHoaDon(donHang) {
     location.reload();
   });
 
-  document.getElementById("logout").addEventListener("click", function (e) {
-    e.preventDefault();
-    localStorage.removeItem("loggedInUser");
-    window.location.href = "Login.html";
-  });
+  const logoutBtn = document.getElementById("logout");
+  if (logoutBtn) {
+    logoutBtn.addEventListener("click", function (e) {
+      e.preventDefault();
+      localStorage.removeItem("loggedInUser");
+      window.location.href = "Login.html";
+    });
+  }
 }

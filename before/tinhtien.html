@@ -15,18 +15,21 @@
     <div id="mainContent" class="container">
       <nav>
         <ul class="menu">
-          <img
-            src="../image/Logo_UIT_updated.svg.png"
-            alt="UIT Logo"
-            class="logo"
-          />
-          <span class="title">Hệ thống tính tiền của siêu thị UIT</span>
-          <li class="logout-button">
-            <a href="./Login.html"><i class="fas fa-sign-out-alt"></i></a>
+          <li class="logo-branch">
+            <div class="logo-container">
+              <img
+                src="../image/Logo_UIT_updated.svg.png"
+                alt="UIT Logo"
+                class="logo"
+              />
+              <span class="branch" id="usernameDisplay"></span>
+            </div>
           </li>
-        </ul>
-        <ul class="branch-info">
-          <li class="username-display" id="usernameDisplay"></li>
+
+          <div class="title">Hệ thống tính tiền của siêu thị UIT</div>
+          <div class="logout-button">
+            <a href="../index.html"><i class="fas fa-sign-out-alt"></i></a>
+          </div>
         </ul>
       </nav>
       <h2 style="display: none">Tính tiền sản phẩm</h2>
@@ -59,13 +62,13 @@
       <table id="sanPhamTable">
         <thead>
           <tr>
-            <th>Mã</th>
-            <th>Tên</th>
-            <th>Giá</th>
-            <th>SL</th>
-            <th>Tổng Giá</th>
-            <th>Giảm Giá</th>
-            <th>Thanh Toán</th>
+            <th>Mã sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá bán</th>
+            <th>Số lượng</th>
+            <th>Tổng giá</th>
+            <th>Giảm giá</th>
+            <th>Thanh toán</th>
           </tr>
         </thead>
         <tbody></tbody>
@@ -76,7 +79,7 @@
       <button id="btnThanhToan">Thanh Toán</button>
     </div>
     <div id="hoaDon" style="display: none">
-      <h2>Siêu thị UIT</h2>
+      <h2>UIT Supermarket</h2>
       <h3 id="branchName"></h3>
       <h2>Hóa đơn</h2>
       <p><strong>Số HĐ:</strong> <span id="soHoaDon"></span></p>
@@ -84,9 +87,9 @@
       <table style="width: 100%; border-collapse: collapse" border="1">
         <thead>
           <tr>
-            <th>Mã SP</th>
-            <th>Tên SP</th>
-            <th>Đơn giá</th>
+            <th>Mã sản phẩm</th>
+            <th>Tên sản phẩm</th>
+            <th>Giá bán</th>
             <th>Số lượng</th>
             <th>Giảm giá (%)</th>
             <th>Thành tiền</th>

@@ -155,16 +155,11 @@ function tinhTien() {
 document.addEventListener("DOMContentLoaded", () => {
   const username = localStorage.getItem("loggedInUser");
   const display = document.getElementById("usernameDisplay");
-  const displayAdd = document.getElementById("userDisplay");
 
   if (username === "ChinhanhA") {
     display.textContent = "Chi nhánh A";
-    displayAdd.textContent =
-      "Tòa A ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
   } else if (username === "ChinhanhB") {
     display.textContent = "Chi nhánh B";
-    displayAdd.textContent =
-      "Tòa B ĐH CNTT, Khu phố 6, Linh Trung,Thủ Đức, TP.HCM";
   }
 
   if (username === "ChinhanhA") {
@@ -215,6 +210,7 @@ async function thanhToan() {
     });
 
     await remove(ref(database, "order"));
+    showNotification("Thanh toán thành công!");
 
     hienThiHoaDon(donHang);
 

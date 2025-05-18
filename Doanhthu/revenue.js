@@ -326,3 +326,22 @@ document
     showNotification("Đang lọc dữ liệu...");
     loadRevenueData(selectedDate, selectedMonth, selectedBranch);
   });
+
+document
+  .getElementById("combinedClearButton")
+  .addEventListener("click", function () {
+    const selectedDate = document.getElementById("filterDate").value;
+    const selectedMonth = document.getElementById("filterMonth").value;
+    const selectedBranch = document.getElementById("branchSelect").value;
+    if (!selectedDate && !selectedMonth && !selectedBranch) {
+      showNotification("Bạn chưa chọn điều kiện để lọc.");
+      return;
+    }
+    showNotification("Đang xóa lựa chọn...");
+    document.getElementById("filterDate").value = "";
+    document.getElementById("branchSelect").value = "";
+    document.getElementById("filterMonth").value = "";
+    document.getElementById("sanPhamTable").style.display = "none";
+    document.getElementById("tongThanhToan").style.display = "none";
+    document.getElementById("invoiceInfo").innerHTML = "";
+  });
